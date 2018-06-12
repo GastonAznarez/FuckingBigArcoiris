@@ -18,13 +18,13 @@
 	x0 = Direccion base del framebuffer.
 
 	x1 = Posicion de barras: //TODO: los valores maximos y minimos que puede tomar.
+		Barra 1 [0:8]
+		Barra 2 [9:15]
 		GPIO  (1 ON, 0 OFF)
-			btn 1 [19]
-			btn 2 [20]
-			btn 3 [21]
-			btn 4 [22]
-		COLOR (BLANCO O NEGRO)
-			[32, 47]
+			btn 1 [16]
+			btn 2 [17]
+			btn 3 [18]
+			btn 4 [19]
 
 	x2 = Pelota
 		Posicion [0:17] //TODO: Valores maximos y minimos que puede tomar.
@@ -49,12 +49,8 @@
 
 	x3 = Color blanco
 	x4 = Punto para pintar con 'print'
-		[0:8] = x
-		[9:17] = y
-		[18:33] = color
-
-	x26 = [0:8] posicion de la barra 1
-	x27 = [0:8] posicion de la barra 2
+		[0:15] = x
+		[16:31] = y
 
 */
 
@@ -70,85 +66,6 @@
 
 //--------------CODIGO----------------------//
 app:
-
-	bl iniciarFondo
-
-	bl iniciarBarras
-
-
-appLoop:
-
-
-
-	bl inputRead
-
-	bl borrarBarras
-
-	bl SiguientePosicionBarra
-
-	bl mostrarBarras
-
-	b appLoop
-
-
-
-
-/*
-
-	mov x2,512         // Y Size
-	mov x7,x0
-	mov w6, 0xFFFF
-	loop4:
-	mov x1,512         // X Size
-	loop5:
-	sturh w6,[x7]	   // Set color of pixel N
-	add x7,x7,2	   // Next pixel
-	sub x1,x1,1	   // decrement X counter
-	cbnz x1,loop5	   // If not end row jump
-	sub x2,x2,1	   // Decrement Y counter
-	cbnz x2,loop4	   // if not last row, jump
-
-	//Hasta aca solo pinte todo de blanco
-
-	mov x4, 0xF800
-	lsl x4, x4, #1
-	add x4, x4, #1
-	lsl x4, x4, 17
-	mov x8, #0
-	//Dejo a x4 con color rojo, y = 254, x = 0
-	loopn: //pinta todos los x, solo printea y suma 1 a la parte del x en x4 512 veces
-	bl print
-	subs xzr, x8, #511
-	b.eq horizontal
-	add x8, x8, #1
-	add x4, x4, #1
-	b loopn
-
-horizontal:
-	mov x4, 0x1F
-	lsl x4, x4, #18
-	add x4, x4, #254
-	mov x8, #0
-	//Dejo a x4 con color azul, y = 0, x = 254
-
-	loopr: //pinta todos los y, solo printea y suma 1 a la parte del x en x4 512 veces
-		bl print
-		subs xzr, x8, #511
-		b.eq InfLoop
-		add x8, x8, #1
-		add x4, x4, 0x200
-		b loopr
-
-
-
-
-
-
-
-
-
-
-
 	// X0 contiene la direccion base del framebuffer
 
 	mov w3, 0x0 //Dejo a x3  como color negro
@@ -194,24 +111,19 @@ loop0:
 	cbnz x2,loop1	   // if not last row, jump
 
 	b app
-*/
+
 
 //-----------FIN CODIGO----------------------------------------------------//
 
+; print:
+; 	mov x6, x4
+; 	lsl x6, x6, 16			//Dejo en x6 el y que hay que dibujar
+; 	mov x7, x4
+; 	and x7, x7, 0xFFFFFFFF
 
-print:
-	and x10, x4, 0x1FF 			//Extraigo los 9 bits de eje X en x4
-	and x9, x4, 0x3FE00
-	lsr x9, x9, #9				//Extraigo los 9 bits del eje Y en x4
-	mov x11, #512
-	madd x9, x11, x9, x10		//X + (Y * 512)
-	lsr x10, x4, #18
-	and x10, x10, 0xFFFF		//Extraigo los 16 bits de color de x4
-	lsl x9, x9, #1				//Multiplico los bits por 2
-	add x9, x9, x0				//Sumo la direccion base del framebuffer
-	sturh w10, [x9]				//Pinto el bit del color extraifo
-	br x30						//Vuelvo a la direccion de donde link
+
 
         // Infinite Loop
 InfLoop:
 	b InfLoop
+

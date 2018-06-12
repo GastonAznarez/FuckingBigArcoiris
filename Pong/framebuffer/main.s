@@ -18,7 +18,33 @@
 	.equ Set_Virtual_Offset,   0x00048009 // Frame Buffer: Set Virtual Offset (Response: X In Pixels, Y In Pixels)
 	.equ Set_Palette,          0x0004800B // Frame Buffer: Set Palette (Response: RGBA Palette Values (Index 0 To 255))
 
+	.equ GPIO_BASE,			   0x200000	  // Base de los GPIO desde la direccion PERIPHERAL_BASE.
+	.equ GPIO_GPLEV0,	       0x34		  // GPIO Pin Level 0 o los niveles de los pines inferiores (0-31)
+	.equ GPIO_4,		       0x10		  // GPIO Pin 0: 4 - El pin n se corresponde con 1 << n, en el caso del BCM 4 es #7
+	.equ GPIO_5,			   0x20
+	.equ GPIO_6,			   0x40
+	.equ GPIO_10,		       0x400      // GPIO Pin 0: 10
+	.equ GPIO_11,		       0x800	  // GPIO Pin 0: 11
+	.equ GPIO_12,			   0x1000
+	.equ GPIO_13,			   0x2000
 
+	.equ BTN_1,				   0x080000
+	.equ BTN_2,				   0x100000
+	.equ BTN_3,				   0x200000
+	.equ BTN_4,				   0x400000
+
+	.equ BARRA_ANCHO,		   0x8
+	.equ BARRA_ALTO,		   0x32	 //50 pixeles
+	.equ BARRA_X,			   0x1FF
+	.equ BARRA_UNIDAD_Y,	   0x200
+
+	.equ FIN_TABLERO_ARRIBA,   0x81
+	.equ FIN_TABLERO_ABAJO,    0x181
+
+	.equ EJE_MAX,			   0x1FF
+
+	.equ BLANCO,			   0xFFFF
+	.equ NEGRO,				   0x0000
 
 // Return CPU ID (0..3) Of The CPU Executed On
 	mrs x0,MPIDR_EL1 // X0 = Multiprocessor Affinity Register (MPIDR)
@@ -37,11 +63,11 @@ FB_Init:
 	and w0,w0,0x3FFFFFFF // Convert Mail Box Frame Buffer Pointer From BUS Address To Physical Address ($CXXXXXXX -> $3XXXXXXX)
 	str w0,[x2] // Store Frame Buffer Pointer Physical Address
 
-	// Core 0 branch to app	
-	b app	
+	// Core 0 branch to app
+	b app
 
-	// Infinite Loop For Core 1, 2 and 3	
-CoreLoop: 
+	// Infinite Loop For Core 1, 2 and 3
+CoreLoop:
 	b CoreLoop
 
 .align 16
@@ -92,4 +118,3 @@ FB_POINTER:
 
 	.word 0x00000000 // $0 (End Tag)
 FB_STRUCT_END:
-

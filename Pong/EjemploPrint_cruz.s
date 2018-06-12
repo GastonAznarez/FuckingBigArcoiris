@@ -18,13 +18,13 @@
 	x0 = Direccion base del framebuffer.
 
 	x1 = Posicion de barras: //TODO: los valores maximos y minimos que puede tomar.
+		Barra 1 [0:8]
+		Barra 2 [9:15]
 		GPIO  (1 ON, 0 OFF)
-			btn 1 [19]
-			btn 2 [20]
-			btn 3 [21]
-			btn 4 [22]
-		COLOR (BLANCO O NEGRO)
-			[32, 47]
+			btn 1 [16]
+			btn 2 [17]
+			btn 3 [18]
+			btn 4 [19]
 
 	x2 = Pelota
 		Posicion [0:17] //TODO: Valores maximos y minimos que puede tomar.
@@ -53,9 +53,6 @@
 		[9:17] = y
 		[18:33] = color
 
-	x26 = [0:8] posicion de la barra 1
-	x27 = [0:8] posicion de la barra 2
-
 */
 
 //-------FIN REGISTROS----------------------//
@@ -63,38 +60,12 @@
 
 //--------DEFINICION DE FUNCIONES-----------//
 .globl app
-
 .global print
 
 //--------FIN DEFINICION DE FUNCIONES-------//
 
 //--------------CODIGO----------------------//
 app:
-
-	bl iniciarFondo
-
-	bl iniciarBarras
-
-
-appLoop:
-
-
-
-	bl inputRead
-
-	bl borrarBarras
-
-	bl SiguientePosicionBarra
-
-	bl mostrarBarras
-
-	b appLoop
-
-
-
-
-/*
-
 	mov x2,512         // Y Size
 	mov x7,x0
 	mov w6, 0xFFFF
@@ -149,69 +120,24 @@ horizontal:
 
 
 
-	// X0 contiene la direccion base del framebuffer
 
-	mov w3, 0x0 //Dejo a x3  como color negro
-	mov w4, 0xFFFF //blanco
-	mov w5, 0xF800    // 0xF800 = RED
-	mov w13, 0x1F //BLUE
-	mov w14, 0x7E0
-
-
-	bl inputRead
-
-	and x7, x1, BTN_1		//Obtengo solo el bit del BTN_1
-	mov w6, w4
-	cbnz x7, change			//Si el bit no es cero (boton pulsado) salto
-
-	and x7, x1, BTN_2
-	mov w6, w13
-	cbnz x7, change
-
-	and x7, x1, BTN_3
-	mov w6, w5
-	cbnz x7, change
-
-	and x7, x1, BTN_4
-	mov w6, w14
-	cbnz x7, change
-
-	mov w6, w3
-
-	b change
-
-change:
-	mov x2,512         // Y Size
-	mov x7,x0
-loop1:
-	mov x1,512         // X Size
-loop0:
-	sturh w6,[x7]	   // Set color of pixel N
-	add x7,x7,2	   // Next pixel
-	sub x1,x1,1	   // decrement X counter
-	cbnz x1,loop0	   // If not end row jump
-	sub x2,x2,1	   // Decrement Y counter
-	cbnz x2,loop1	   // if not last row, jump
-
-	b app
-*/
 
 //-----------FIN CODIGO----------------------------------------------------//
 
 
-print:
-	and x10, x4, 0x1FF 			//Extraigo los 9 bits de eje X en x4
-	and x9, x4, 0x3FE00
-	lsr x9, x9, #9				//Extraigo los 9 bits del eje Y en x4
-	mov x11, #512
-	madd x9, x11, x9, x10		//X + (Y * 512)
-	lsr x10, x4, #18
-	and x10, x10, 0xFFFF		//Extraigo los 16 bits de color de x4
-	lsl x9, x9, #1				//Multiplico los bits por 2
-	add x9, x9, x0				//Sumo la direccion base del framebuffer
-	sturh w10, [x9]				//Pinto el bit del color extraifo
-	br x30						//Vuelvo a la direccion de donde link
 
+	print:
+	and x10, x4, 0x1FF
+	and x9, x4, 0x3FE00
+	lsr x9, x9, #9
+	mov x11, #512
+	madd x9, x11, x9, x10
+	lsr x10, x4, #18
+	and x10, x10, 0xFFFF
+	lsl x9, x9, #1
+	add x9, x9, x0
+	sturh w10, [x9]
+	br x30
         // Infinite Loop
 InfLoop:
 	b InfLoop
