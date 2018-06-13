@@ -9,38 +9,38 @@ Linker script and memory map
 
 LOAD main.o
 
-.text           0x0000000000000000    0x10658
+.text           0x0000000000000000    0x10700
  *(.text*)
- .text          0x0000000000000000    0x10658 main.o
+ .text          0x0000000000000000    0x10700 main.o
                 0x00000000000100a0                app
                 0x00000000000100c8                print
                 0x00000000000100f8                inputRead
                 0x0000000000010138                iniciarFondo
-                0x00000000000101d4                iniciarBarras
-                0x00000000000101e0                borrarBarras
-                0x00000000000101e8                mostrarBarras
-                0x00000000000102a0                SiguientePosicionBarra
-                0x0000000000010328                DibujarPelota
-                0x000000000001039c                BorrarPelota
-                0x0000000000010410                CambiarDireccionPelota
-                0x00000000000104b4                MoverPelota
-                0x0000000000010524                CheckPelota
-                0x0000000000010638                InicioPelota
-                0x0000000000010658                PuntoPelota
+                0x000000000001027c                iniciarBarras
+                0x0000000000010288                borrarBarras
+                0x0000000000010290                mostrarBarras
+                0x0000000000010348                SiguientePosicionBarra
+                0x00000000000103d0                DibujarPelota
+                0x0000000000010444                BorrarPelota
+                0x00000000000104b8                CambiarDireccionPelota
+                0x000000000001055c                MoverPelota
+                0x00000000000105cc                CheckPelota
+                0x00000000000106e0                InicioPelota
+                0x0000000000010700                PuntoPelota
 
-.iplt           0x0000000000010658        0x0
- .iplt          0x0000000000010658        0x0 main.o
+.iplt           0x0000000000010700        0x0
+ .iplt          0x0000000000010700        0x0 main.o
 
-.rela.dyn       0x0000000000010658        0x0
- .rela.iplt     0x0000000000010658        0x0 main.o
+.rela.dyn       0x0000000000010700        0x0
+ .rela.iplt     0x0000000000010700        0x0 main.o
 
-.data           0x0000000000010658        0x0
- .data          0x0000000000010658        0x0 main.o
+.data           0x0000000000010700        0x0
+ .data          0x0000000000010700        0x0 main.o
 
-.igot.plt       0x0000000000010658        0x0
- .igot.plt      0x0000000000010658        0x0 main.o
+.igot.plt       0x0000000000010700        0x0
+ .igot.plt      0x0000000000010700        0x0 main.o
 
-.bss            0x0000000000010658        0x0
+.bss            0x0000000000010700        0x0
  *(.bss*)
- .bss           0x0000000000010658        0x0 main.o
+ .bss           0x0000000000010700        0x0 main.o
 OUTPUT(main.elf elf64-littleaarch64)

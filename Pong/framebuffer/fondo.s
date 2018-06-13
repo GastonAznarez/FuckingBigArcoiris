@@ -77,4 +77,226 @@ horizontalTerminado:
 
 //-------INICIO DE CODIGO-------//
 
+variables:
+    mov w11,0xFFFF //Blanco
+    mov x6, 0
+    mov x5, 0
+    mov x7, 256
+	mov w10,0x0     // azul
+	mov x2,512         // Y Size
+    add x6,x0,0
+loop1:
+	mov x1,512         // X Size
+loop0:
+	sturh w10,[x6]	   // Set color of pixel N
+	add x6,x6,2	    // Next pixel
+	sub x1,x1,1	    // decrement X counter
+	cbnz x1,loop0   // If not end row jump
+	sub x2,x2,1	    // Decrement Y counter
+	cbnz x2,loop1  // if not last row, jump
+
+
+    add x6,x0,512
+    add x6,x6,131072
+
+lineaMedio:
+    sturh w11,[x6] //Pinta el pixel BLANCO
+    add x6,x6,1024 // Next line
+    sub x7,x7,1 //Counter
+    sturh w11,[x6] //Pinta el pixel BLANCO
+    add x6,x6,1024 // Next line
+    sub x7,x7,1 //Counter
+    sturh w10,[x6] //Pinta el pixel NEGRO
+    add x6,x6,1024 // Next line
+    sub x7,x7,1 //Counter
+    sturh w10,[x6] //Pinta el pixel NEGRO
+    add x6,x6,1024 // Next line
+    sub x7,x7,1 //Counter
+    cbnz x7,lineaMedio // loop
+
+
+    sub x6,x6,512 //Al principio
+    add x7,x7,511 //Counter
+lineaLateralB:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,2 // Next pixel
+    sub x7,x7,1 //Counter
+    cbnz x7,lineaLateralB // loop
+
+    add x7,x7,511 //Counter
+    add x6,x0,131072
+    //lsl x6,x6,4
+lineaLateralA:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,2 // Next pixel
+    sub x7,x7,1 //Counter
+    cbnz x7,lineaLateralA // loop
+    b InfLoop
+
+
+/*
+cero:
+    mov x7,18 //Counter
+    add x6,x0,0
+    add x5,x6,0
+    ceroVertical1:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,2 // Next pixel
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1022 // Next line
+    sub x7,x7,1
+    cbnz x7, ceroVertical1
+
+    add x6,x6,1022 // Next line
+    mov x7, #10 //Counter
+    ceroHorizontal1:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1024 // Next line
+    sturh w11,[x6] //Pinta el pixel
+    sub x6,x6,1022 //Siguiente pixel
+    sub x7,x7,1
+    cbnz x7, ceroHorizontal1
+
+    add x6,x5,0
+    mov x7, #10 //Counter
+    ceroHorizontal2:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1024 // Next line
+    sturh w11,[x6] //Pinta el pixel
+    sub x6,x6,1022 //Siguiente pixel
+    sub x7,x7,1
+    cbnz x7, ceroHorizontal2
+
+    mov x7,18 //Counter
+    sub x6,x6,4 //Siguiente pixel
+    ceroVertical2:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,2 // Next pixel
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1022 // Next line
+    sub x7,x7,1
+    cbnz x7, ceroVertical2
+    b InfLoop
+
+
+
+    add x7,x7,20 //Counter
+    add x6,x0,30
+uno:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,2 // Next pixel
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1022 // Next line
+    sub x7,x7,1
+    cbnz x7, uno
+    b InfLoop
+
+
+dos:
+    mov x7,10 //Counter
+    add x6,x0,60
+    add x5,x6,0
+    dosHorizontal1:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1024 // Next line
+    sturh w11,[x6] //Pinta el pixel
+    sub x6,x6,1022 //Siguiente pixel
+    sub x7,x7,1
+    cbnz x7, dosHorizontal1
+
+    mov x7,9 //Counter
+    sub x6,x6,4 //Anterior pixel
+    dosVertical1:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,2 // Next pixel
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1022 // Next line
+    sub x7,x7,1
+    cbnz x7, dosVertical1
+
+    mov x7,10 //Counter
+    sub x6,x6,20 //Anterior pixel
+    dosHorizontal2:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1024 // Next line
+    sturh w11,[x6] //Pinta el pixel
+    sub x6,x6,1022 //Siguiente pixel
+    sub x7,x7,1
+    cbnz x7, dosHorizontal2
+
+    mov x7,9 //Counter
+    sub x6,x6,20 //Anterior pixel
+    dosVertical2:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,2 // Next pixel
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1022 // Next line
+    sub x7,x7,1
+    cbnz x7, dosVertical2
+
+    mov x7, #10 //Counter
+    sub x6,x6,4 //Anterior pixel
+    dosHorizontal3:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1024 // Next line
+    sturh w11,[x6] //Pinta el pixel
+    sub x6,x6,1022 //Siguiente pixel
+    sub x7,x7,1
+    cbnz x7, dosHorizontal3
+
+
+tres:
+    mov x7,10 //Counter
+    add x6,x0,90
+    add x5,x6,0
+    tresHorizontal1:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1024 // Next line
+    sturh w11,[x6] //Pinta el pixel
+    sub x6,x6,1022 //Siguiente pixel
+    sub x7,x7,1
+    cbnz x7, tresHorizontal1
+
+    mov x7,9 //Counter
+    sub x6,x6,4 //Anterior pixel
+    tresVertical1:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,2 // Next pixel
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1022 // Next line
+    sub x7,x7,1
+    cbnz x7, tresVertical1
+
+    mov x7,10 //Counter
+    sub x6,x6,20 //Anterior pixel
+    tresHorizontal2:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1024 // Next line
+    sturh w11,[x6] //Pinta el pixel
+    sub x6,x6,1022 //Siguiente pixel
+    sub x7,x7,1
+    cbnz x7, tresHorizontal2
+
+    mov x7,9 //Counter
+    sub x6,x6,4 //Anterior pixel
+    tresVertical2:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,2 // Next pixel
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1022 // Next line
+    sub x7,x7,1
+    cbnz x7, tresVertical2
+
+    mov x7,10 //Counter
+    sub x6,x6,20 //Anterior pixel
+    tresHorizontal3:
+    sturh w11,[x6] //Pinta el pixel
+    add x6,x6,1024 // Next line
+    sturh w11,[x6] //Pinta el pixel
+    sub x6,x6,1022 //Siguiente pixel
+    sub x7,x7,1
+    cbnz x7, tresHorizontal3
+*/
+
+
 //-------FIN DE CODIGO----------//
