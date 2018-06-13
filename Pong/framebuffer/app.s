@@ -26,14 +26,14 @@
 		COLOR (BLANCO O NEGRO)
 			[32, 47]
 
-	x2 = Pelota
+	x3 = Pelota
 		Posicion [0:17] //TODO: Valores maximos y minimos que puede tomar.
-			[0:8] eje X, [9:15] eje Y.
+			[0:8] eje X, [9:17] eje Y.
 		Direccion [18:22]
-			[18] Izquierda 0 Derecha 1,
+			[18] 1 Diagonal externa, 0 Diagonal interna (interna: mas cerca de la orizontal).
 			[19] Horizontal 1 Diagonal 0,
 			[20] Arriba 1 Abajo 0,
-			[21] 1 Diagonal externa, 0 Diagonal interna (interna: mas cerca de la orizontal).
+			[21] Izquierda 0 Derecha 1,
 		Puntaje [23:26]
 			[23:24] Puntaje p1,
 			[25:26] Puntaje p2.
@@ -46,8 +46,6 @@
 				n = 12 limite inferior,
 				n = 13 arco p1,
 				n = 14 arco p2.
-
-	x3 = Color blanco
 	x4 = Punto para pintar con 'print'
 		[0:8] = x
 		[9:17] = y
@@ -75,6 +73,8 @@ app:
 
 	bl iniciarBarras
 
+	mov x3, 0xa01
+	lsl x3, x3, 8
 
 appLoop:
 
@@ -87,6 +87,9 @@ appLoop:
 	bl SiguientePosicionBarra
 
 	bl mostrarBarras
+
+	bl MoverPelota
+
 
 	b appLoop
 

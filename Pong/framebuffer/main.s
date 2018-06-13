@@ -38,6 +38,9 @@
 	.equ BARRA_X,			   0x1FF
 	.equ BARRA_UNIDAD_Y,	   0x200
 
+	.equ PELOTA_MITAD,		   0x6
+	.equ PELOTA,			   0x15	
+
 	.equ FIN_TABLERO_ARRIBA,   0x81
 	.equ FIN_TABLERO_ABAJO,    0x181
 
