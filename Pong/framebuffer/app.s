@@ -73,9 +73,9 @@ app:
 
 	bl iniciarBarras
 
-	mov x3, 0xa01
+	mov x3, 0x201
 	lsl x3, x3, 8
-
+	mov x2, 0x7
 appLoop:
 
 

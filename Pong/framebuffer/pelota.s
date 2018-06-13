@@ -249,7 +249,7 @@ MoverPelota:
     bl BorrarPelota
     bl CheckPelota
 
-    lsr x9, x2
+    mov x9, x2
 
     and x8, x9, 0x2
     cbnz x8, horizontal
@@ -326,7 +326,7 @@ tocaderecha:
     mov x11, 0x8
     eor x2, x2, x11
 
-    mov x7, 0x1
+    mov x7, 0x2
     and x7, x7, x2
     eor x2, x2, x7
     br x30
