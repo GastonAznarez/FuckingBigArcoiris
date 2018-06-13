@@ -249,13 +249,13 @@ MoverPelota:
     bl BorrarPelota
     bl CheckPelota
 
-    lsr x9, x3, #18
+    lsr x9, x2
 
     and x8, x9, 0x2
     cbnz x8, horizontal
     mov x10, 1
     mov x11, 1
-    and x8, x9, #1
+    and x8, x9, 0x1
     cbnz x8, diagoexterna
     add x10, x10, 1
     b saltoInterna
@@ -290,8 +290,8 @@ MoverPelota:
 
 
 CheckPelota:
-    lsr x4, x3, 9
     and x5, x3, 0x1FF
+    lsr x4, x3, 9
     sub x4,x4, 7
     and x4, x4, 0x1FF
     cmp x4, 0x80
@@ -309,12 +309,12 @@ sigo:
     br x30
 
     tocalado:
-    mov x11, 0x100000
-    eor x3, x3, x11
+    mov x11, 0x4
+    eor x2, x2, x11
     b sigo
 
 
-    tocaderecha:
+tocaderecha:
     mov x13, BARRA_ALTO + PELOTA
     lsr x13, x13, 1
     add x12, x13, x26
@@ -323,45 +323,15 @@ sigo:
     sub x12, x26, x13
     cmp x4, x12
     b.le punto
-    mov x11, 0x200000
-    eor x3, x3, x11
+    mov x11, 0x8
+    eor x2, x2, x11
 
-
-    mov x7, 0x80000
-    orr x3, x3, x7
-
-
-
-
-
+    mov x7, 0x1
+    and x7, x7, x2
+    eor x2, x2, x7
     br x30
 
-
-
-    mov x11, 0x200000
-    eor x3, x3, x11
-    add x6, x26, 10
-    cmp x4, x6
-    b.ge abajo
-    sub x6, x26, 10
-    cmp x4,x6
-    b.ge medio
-    mov x7, 0x100000
-    orr x3, x3, x7
-    b listo
-    abajo:
-    mov x7, 0x100000
-    and x7, x3, x7
-    eor x3, x3, x7
-    listo:
-    mov x7, 0x8000
-    and x7, x3, x7
-    eor x3, x3, x7
-    br x30
-    medio:
-    mov x7, 0x8000
-    orr x3, x3, x7
-    tocaizquierda:
+tocaizquierda:
     mov x13, BARRA_ALTO + PELOTA
     lsr x13, x13, 1
     add x12, x13, x27
@@ -370,9 +340,12 @@ sigo:
     sub x12, x27, x13
     cmp x4, x12
     b.le punto2
-    mov x11, 0x200000
-    eor x3, x3, x11
+    mov x11, 0x8
+    eor x2, x2, x11
     br x30
+
+
+
 
     punto:
     b app
