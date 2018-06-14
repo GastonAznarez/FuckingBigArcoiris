@@ -9,38 +9,39 @@ Linker script and memory map
 
 LOAD main.o
 
-.text           0x0000000000000000    0x106b8
+.text           0x0000000000000000    0x106e0
  *(.text*)
- .text          0x0000000000000000    0x106b8 main.o
+ .text          0x0000000000000000    0x106e0 main.o
                 0x00000000000100a0                app
-                0x00000000000100e0                print
-                0x0000000000010110                inputRead
-                0x0000000000010150                iniciarFondo
-                0x00000000000101ec                iniciarBarras
-                0x00000000000101f8                borrarBarras
-                0x0000000000010200                mostrarBarras
-                0x00000000000102b8                SiguientePosicionBarra
-                0x0000000000010340                DibujarPelota
-                0x00000000000103b4                BorrarPelota
-                0x0000000000010428                CambiarDireccionPelota
-                0x00000000000104cc                MoverPelota
-                0x000000000001053c                CheckPelota
-                0x0000000000010698                InicioPelota
-                0x00000000000106b8                PuntoPelota
+                0x00000000000100e4                restart
+                0x0000000000010108                print
+                0x0000000000010138                inputRead
+                0x0000000000010178                iniciarFondo
+                0x0000000000010214                iniciarBarras
+                0x0000000000010220                borrarBarras
+                0x0000000000010228                mostrarBarras
+                0x00000000000102e0                SiguientePosicionBarra
+                0x0000000000010368                DibujarPelota
+                0x00000000000103dc                BorrarPelota
+                0x0000000000010450                CambiarDireccionPelota
+                0x00000000000104f4                MoverPelota
+                0x0000000000010564                CheckPelota
+                0x00000000000106c0                InicioPelota
+                0x00000000000106e0                PuntoPelota
 
-.iplt           0x00000000000106b8        0x0
- .iplt          0x00000000000106b8        0x0 main.o
+.iplt           0x00000000000106e0        0x0
+ .iplt          0x00000000000106e0        0x0 main.o
 
-.rela.dyn       0x00000000000106b8        0x0
- .rela.iplt     0x00000000000106b8        0x0 main.o
+.rela.dyn       0x00000000000106e0        0x0
+ .rela.iplt     0x00000000000106e0        0x0 main.o
 
-.data           0x00000000000106b8        0x0
- .data          0x00000000000106b8        0x0 main.o
+.data           0x00000000000106e0        0x0
+ .data          0x00000000000106e0        0x0 main.o
 
-.igot.plt       0x00000000000106b8        0x0
- .igot.plt      0x00000000000106b8        0x0 main.o
+.igot.plt       0x00000000000106e0        0x0
+ .igot.plt      0x00000000000106e0        0x0 main.o
 
-.bss            0x00000000000106b8        0x0
+.bss            0x00000000000106e0        0x0
  *(.bss*)
- .bss           0x00000000000106b8        0x0 main.o
+ .bss           0x00000000000106e0        0x0 main.o
 OUTPUT(main.elf elf64-littleaarch64)

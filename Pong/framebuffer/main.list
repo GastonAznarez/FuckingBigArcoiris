@@ -16446,534 +16446,552 @@ Disassembly of section .text:
 
 00000000000100a0 <app>:
    100a0:	d2800419 	mov	x25, #0x20                  	// #32
-   100a4:	9400002b 	bl	10150 <iniciarFondo>
-   100a8:	94000051 	bl	101ec <iniciarBarras>
+   100a4:	94000035 	bl	10178 <iniciarFondo>
+   100a8:	9400005b 	bl	10214 <iniciarBarras>
    100ac:	d2804023 	mov	x3, #0x201                 	// #513
    100b0:	d378dc63 	lsl	x3, x3, #8
    100b4:	d28000e2 	mov	x2, #0x7                   	// #7
+   100b8:	9400000d 	bl	100ec <inicioLoop>
 
-00000000000100b8 <appLoop>:
-   100b8:	94000016 	bl	10110 <inputRead>
-   100bc:	9400004f 	bl	101f8 <borrarBarras>
-   100c0:	9400007e 	bl	102b8 <SiguientePosicionBarra>
-   100c4:	9400004f 	bl	10200 <mostrarBarras>
-   100c8:	b4000079 	cbz	x25, 100d4 <timerCount>
-   100cc:	d1000739 	sub	x25, x25, #0x1
-   100d0:	17fffffa 	b	100b8 <appLoop>
+00000000000100bc <appLoop>:
+   100bc:	9400001f 	bl	10138 <inputRead>
+   100c0:	94000058 	bl	10220 <borrarBarras>
+   100c4:	94000087 	bl	102e0 <SiguientePosicionBarra>
+   100c8:	94000058 	bl	10228 <mostrarBarras>
+   100cc:	b4000079 	cbz	x25, 100d8 <timerCount>
+   100d0:	d1000739 	sub	x25, x25, #0x1
+   100d4:	17fffffa 	b	100bc <appLoop>
 
-00000000000100d4 <timerCount>:
-   100d4:	d2800419 	mov	x25, #0x20                  	// #32
-   100d8:	940000fd 	bl	104cc <MoverPelota>
-   100dc:	17fffff7 	b	100b8 <appLoop>
+00000000000100d8 <timerCount>:
+   100d8:	d2800419 	mov	x25, #0x20                  	// #32
+   100dc:	94000106 	bl	104f4 <MoverPelota>
+   100e0:	17fffff7 	b	100bc <appLoop>
 
-00000000000100e0 <print>:
-   100e0:	9240208a 	and	x10, x4, #0x1ff
-   100e4:	92772089 	and	x9, x4, #0x3fe00
-   100e8:	d349fd29 	lsr	x9, x9, #9
-   100ec:	d280400b 	mov	x11, #0x200                 	// #512
-   100f0:	9b092969 	madd	x9, x11, x9, x10
-   100f4:	d352fc8a 	lsr	x10, x4, #18
-   100f8:	92403d4a 	and	x10, x10, #0xffff
-   100fc:	d37ff929 	lsl	x9, x9, #1
-   10100:	8b000129 	add	x9, x9, x0
-   10104:	7800012a 	sturh	w10, [x9]
-   10108:	d61f03c0 	br	x30
+00000000000100e4 <restart>:
+   100e4:	9400004f 	bl	10220 <borrarBarras>
+   100e8:	17ffffee 	b	100a0 <app>
 
-000000000001010c <InfLoop>:
-   1010c:	14000000 	b	1010c <InfLoop>
+00000000000100ec <inicioLoop>:
+   100ec:	aa1e03fd 	mov	x29, x30
 
-0000000000010110 <inputRead>:
-   10110:	52a7e408 	mov	w8, #0x3f200000            	// #1059061760
-   10114:	b9403509 	ldr	w9, [x8,#52]
-   10118:	8a060021 	and	x1, x1, x6
-   1011c:	121b012a 	and	w10, w9, #0x20
-   10120:	d372c54a 	lsl	x10, x10, #14
-   10124:	aa0a0021 	orr	x1, x1, x10
-   10128:	121a012a 	and	w10, w9, #0x40
-   1012c:	d372c54a 	lsl	x10, x10, #14
-   10130:	aa0a0021 	orr	x1, x1, x10
-   10134:	1214012a 	and	w10, w9, #0x1000
-   10138:	d377d94a 	lsl	x10, x10, #9
-   1013c:	aa0a0021 	orr	x1, x1, x10
-   10140:	1213012a 	and	w10, w9, #0x2000
-   10144:	d377d94a 	lsl	x10, x10, #9
-   10148:	aa0a0021 	orr	x1, x1, x10
-   1014c:	d61f03c0 	br	x30
+00000000000100f0 <loopControl>:
+   100f0:	94000012 	bl	10138 <inputRead>
+   100f4:	d36db027 	lsl	x7, x1, #19
+   100f8:	92400ce7 	and	x7, x7, #0xf
+   100fc:	b5000041 	cbnz	x1, 10104 <volverAlApp>
+   10100:	17fffffc 	b	100f0 <loopControl>
 
-0000000000010150 <iniciarFondo>:
-   10150:	aa1e03fd 	mov	x29, x30
-   10154:	d29fffe4 	mov	x4, #0xffff                	// #65535
-   10158:	d37ef484 	lsl	x4, x4, #2
-   1015c:	91000484 	add	x4, x4, #0x1
-   10160:	d370bc84 	lsl	x4, x4, #16
-   10164:	9103f884 	add	x4, x4, #0xfe
-   10168:	d2800008 	mov	x8, #0x0                   	// #0
+0000000000010104 <volverAlApp>:
+   10104:	d61f03a0 	br	x29
 
-000000000001016c <loopVertical>:
-   1016c:	f104011f 	cmp	x8, #0x100
-   10170:	54000140 	b.eq	10198 <verticalTeminado>
-   10174:	97ffffdb 	bl	100e0 <print>
-   10178:	91000508 	add	x8, x8, #0x1
-   1017c:	91080084 	add	x4, x4, #0x200
-   10180:	97ffffd8 	bl	100e0 <print>
-   10184:	91000508 	add	x8, x8, #0x1
-   10188:	91080084 	add	x4, x4, #0x200
-   1018c:	91000908 	add	x8, x8, #0x2
-   10190:	91100084 	add	x4, x4, #0x400
-   10194:	17fffff6 	b	1016c <loopVertical>
+0000000000010108 <print>:
+   10108:	9240208a 	and	x10, x4, #0x1ff
+   1010c:	92772089 	and	x9, x4, #0x3fe00
+   10110:	d349fd29 	lsr	x9, x9, #9
+   10114:	d280400b 	mov	x11, #0x200                 	// #512
+   10118:	9b092969 	madd	x9, x11, x9, x10
+   1011c:	d352fc8a 	lsr	x10, x4, #18
+   10120:	92403d4a 	and	x10, x10, #0xffff
+   10124:	d37ff929 	lsl	x9, x9, #1
+   10128:	8b000129 	add	x9, x9, x0
+   1012c:	7800012a 	sturh	w10, [x9]
+   10130:	d61f03c0 	br	x30
 
-0000000000010198 <verticalTeminado>:
-   10198:	d29fffe4 	mov	x4, #0xffff                	// #65535
-   1019c:	d37ef484 	lsl	x4, x4, #2
-   101a0:	91000484 	add	x4, x4, #0x1
-   101a4:	d370bc84 	lsl	x4, x4, #16
-   101a8:	d2800008 	mov	x8, #0x0                   	// #0
-   101ac:	d2800025 	mov	x5, #0x1                   	// #1
+0000000000010134 <InfLoop>:
+   10134:	14000000 	b	10134 <InfLoop>
 
-00000000000101b0 <loopHorizontal>:
-   101b0:	97ffffcc 	bl	100e0 <print>
-   101b4:	f107fd1f 	cmp	x8, #0x1ff
-   101b8:	54000080 	b.eq	101c8 <horizontalTerminado1>
-   101bc:	91000508 	add	x8, x8, #0x1
-   101c0:	91000484 	add	x4, x4, #0x1
-   101c4:	17fffffb 	b	101b0 <loopHorizontal>
+0000000000010138 <inputRead>:
+   10138:	52a7e408 	mov	w8, #0x3f200000            	// #1059061760
+   1013c:	b9403509 	ldr	w9, [x8,#52]
+   10140:	8a060021 	and	x1, x1, x6
+   10144:	121b012a 	and	w10, w9, #0x20
+   10148:	d372c54a 	lsl	x10, x10, #14
+   1014c:	aa0a0021 	orr	x1, x1, x10
+   10150:	121a012a 	and	w10, w9, #0x40
+   10154:	d372c54a 	lsl	x10, x10, #14
+   10158:	aa0a0021 	orr	x1, x1, x10
+   1015c:	1214012a 	and	w10, w9, #0x1000
+   10160:	d377d94a 	lsl	x10, x10, #9
+   10164:	aa0a0021 	orr	x1, x1, x10
+   10168:	1213012a 	and	w10, w9, #0x2000
+   1016c:	d377d94a 	lsl	x10, x10, #9
+   10170:	aa0a0021 	orr	x1, x1, x10
+   10174:	d61f03c0 	br	x30
 
-00000000000101c8 <horizontalTerminado1>:
-   101c8:	b4000105 	cbz	x5, 101e8 <horizontalTerminado>
-   101cc:	d10004a5 	sub	x5, x5, #0x1
-   101d0:	d29fffe4 	mov	x4, #0xffff                	// #65535
-   101d4:	d377d884 	lsl	x4, x4, #9
-   101d8:	91060484 	add	x4, x4, #0x181
-   101dc:	d377d884 	lsl	x4, x4, #9
-   101e0:	d2800008 	mov	x8, #0x0                   	// #0
-   101e4:	17fffff3 	b	101b0 <loopHorizontal>
+0000000000010178 <iniciarFondo>:
+   10178:	aa1e03fd 	mov	x29, x30
+   1017c:	d29fffe4 	mov	x4, #0xffff                	// #65535
+   10180:	d37ef484 	lsl	x4, x4, #2
+   10184:	91000484 	add	x4, x4, #0x1
+   10188:	d370bc84 	lsl	x4, x4, #16
+   1018c:	9103f884 	add	x4, x4, #0xfe
+   10190:	d2800008 	mov	x8, #0x0                   	// #0
 
-00000000000101e8 <horizontalTerminado>:
-   101e8:	d61f03a0 	br	x29
+0000000000010194 <loopVertical>:
+   10194:	f104011f 	cmp	x8, #0x100
+   10198:	54000140 	b.eq	101c0 <verticalTeminado>
+   1019c:	97ffffdb 	bl	10108 <print>
+   101a0:	91000508 	add	x8, x8, #0x1
+   101a4:	91080084 	add	x4, x4, #0x200
+   101a8:	97ffffd8 	bl	10108 <print>
+   101ac:	91000508 	add	x8, x8, #0x1
+   101b0:	91080084 	add	x4, x4, #0x200
+   101b4:	91000908 	add	x8, x8, #0x2
+   101b8:	91100084 	add	x4, x4, #0x400
+   101bc:	17fffff6 	b	10194 <loopVertical>
 
-00000000000101ec <iniciarBarras>:
-   101ec:	d280201b 	mov	x27, #0x100                 	// #256
-   101f0:	d280201a 	mov	x26, #0x100                 	// #256
-   101f4:	14000003 	b	10200 <mostrarBarras>
+00000000000101c0 <verticalTeminado>:
+   101c0:	d29fffe4 	mov	x4, #0xffff                	// #65535
+   101c4:	d37ef484 	lsl	x4, x4, #2
+   101c8:	91000484 	add	x4, x4, #0x1
+   101cc:	d370bc84 	lsl	x4, x4, #16
+   101d0:	d2800008 	mov	x8, #0x0                   	// #0
+   101d4:	d2800025 	mov	x5, #0x1                   	// #1
 
-00000000000101f8 <borrarBarras>:
-   101f8:	f2e00001 	movk	x1, #0x0, lsl #48
-   101fc:	14000002 	b	10204 <dibujarBarra>
+00000000000101d8 <loopHorizontal>:
+   101d8:	97ffffcc 	bl	10108 <print>
+   101dc:	f107fd1f 	cmp	x8, #0x1ff
+   101e0:	54000080 	b.eq	101f0 <horizontalTerminado1>
+   101e4:	91000508 	add	x8, x8, #0x1
+   101e8:	91000484 	add	x4, x4, #0x1
+   101ec:	17fffffb 	b	101d8 <loopHorizontal>
 
-0000000000010200 <mostrarBarras>:
-   10200:	f2ffffe1 	movk	x1, #0xffff, lsl #48
+00000000000101f0 <horizontalTerminado1>:
+   101f0:	b4000105 	cbz	x5, 10210 <horizontalTerminado>
+   101f4:	d10004a5 	sub	x5, x5, #0x1
+   101f8:	d29fffe4 	mov	x4, #0xffff                	// #65535
+   101fc:	d377d884 	lsl	x4, x4, #9
+   10200:	91060484 	add	x4, x4, #0x181
+   10204:	d377d884 	lsl	x4, x4, #9
+   10208:	d2800008 	mov	x8, #0x0                   	// #0
+   1020c:	17fffff3 	b	101d8 <loopHorizontal>
 
-0000000000010204 <dibujarBarra>:
-   10204:	aa1e03fd 	mov	x29, x30
-   10208:	d280002d 	mov	x13, #0x1                   	// #1
-   1020c:	aa1b03e7 	mov	x7, x27
-   10210:	924020e7 	and	x7, x7, #0x1ff
-   10214:	d2800646 	mov	x6, #0x32                  	// #50
-   10218:	d341fcc6 	lsr	x6, x6, #1
-   1021c:	cb0600e7 	sub	x7, x7, x6
-   10220:	d370fc2f 	lsr	x15, x1, #48
-   10224:	92403def 	and	x15, x15, #0xffff
-   10228:	aa0f03e4 	mov	x4, x15
-   1022c:	d377d884 	lsl	x4, x4, #9
-   10230:	aa070084 	orr	x4, x4, x7
-   10234:	d377d884 	lsl	x4, x4, #9
+0000000000010210 <horizontalTerminado>:
+   10210:	d61f03a0 	br	x29
 
-0000000000010238 <puntoBarra>:
-   10238:	d2800008 	mov	x8, #0x0                   	// #0
+0000000000010214 <iniciarBarras>:
+   10214:	d280201b 	mov	x27, #0x100                 	// #256
+   10218:	d280201a 	mov	x26, #0x100                 	// #256
+   1021c:	14000003 	b	10228 <mostrarBarras>
 
-000000000001023c <barraVertical>:
-   1023c:	f100c91f 	cmp	x8, #0x32
-   10240:	540000a0 	b.eq	10254 <barraTeminado>
-   10244:	97ffffa7 	bl	100e0 <print>
-   10248:	91000508 	add	x8, x8, #0x1
-   1024c:	91080084 	add	x4, x4, #0x200
-   10250:	17fffffb 	b	1023c <barraVertical>
+0000000000010220 <borrarBarras>:
+   10220:	f2e00001 	movk	x1, #0x0, lsl #48
+   10224:	14000002 	b	1022c <dibujarBarra>
 
-0000000000010254 <barraTeminado>:
-   10254:	910005ad 	add	x13, x13, #0x1
-   10258:	f10021bf 	cmp	x13, #0x8
-   1025c:	54000120 	b.eq	10280 <barra2>
-   10260:	d280010b 	mov	x11, #0x8                   	// #8
-   10264:	d37ff96b 	lsl	x11, x11, #1
-   10268:	eb0b01bf 	cmp	x13, x11
-   1026c:	54000240 	b.eq	102b4 <listaBarra>
-   10270:	d28c800a 	mov	x10, #0x6400                	// #25600
-   10274:	cb0a0084 	sub	x4, x4, x10
-   10278:	91000484 	add	x4, x4, #0x1
-   1027c:	17ffffef 	b	10238 <puntoBarra>
+0000000000010228 <mostrarBarras>:
+   10228:	f2ffffe1 	movk	x1, #0xffff, lsl #48
 
-0000000000010280 <barra2>:
-   10280:	aa1a03e7 	mov	x7, x26
-   10284:	924020e7 	and	x7, x7, #0x1ff
-   10288:	cb0600e7 	sub	x7, x7, x6
-   1028c:	d370fc2f 	lsr	x15, x1, #48
-   10290:	92403def 	and	x15, x15, #0xffff
-   10294:	aa0f03e4 	mov	x4, x15
-   10298:	d377d884 	lsl	x4, x4, #9
-   1029c:	aa070084 	orr	x4, x4, x7
-   102a0:	d377d884 	lsl	x4, x4, #9
-   102a4:	d2803fea 	mov	x10, #0x1ff                 	// #511
-   102a8:	d100214a 	sub	x10, x10, #0x8
-   102ac:	aa0a0084 	orr	x4, x4, x10
-   102b0:	17ffffe2 	b	10238 <puntoBarra>
+000000000001022c <dibujarBarra>:
+   1022c:	aa1e03fd 	mov	x29, x30
+   10230:	d280002d 	mov	x13, #0x1                   	// #1
+   10234:	aa1b03e7 	mov	x7, x27
+   10238:	924020e7 	and	x7, x7, #0x1ff
+   1023c:	d2800646 	mov	x6, #0x32                  	// #50
+   10240:	d341fcc6 	lsr	x6, x6, #1
+   10244:	cb0600e7 	sub	x7, x7, x6
+   10248:	d370fc2f 	lsr	x15, x1, #48
+   1024c:	92403def 	and	x15, x15, #0xffff
+   10250:	aa0f03e4 	mov	x4, x15
+   10254:	d377d884 	lsl	x4, x4, #9
+   10258:	aa070084 	orr	x4, x4, x7
+   1025c:	d377d884 	lsl	x4, x4, #9
 
-00000000000102b4 <listaBarra>:
-   102b4:	d61f03a0 	br	x29
+0000000000010260 <puntoBarra>:
+   10260:	d2800008 	mov	x8, #0x0                   	// #0
 
-00000000000102b8 <SiguientePosicionBarra>:
-   102b8:	aa1e03fd 	mov	x29, x30
-   102bc:	aa1f03e5 	mov	x5, xzr
-   102c0:	aa1b03e6 	mov	x6, x27
-   102c4:	924020c6 	and	x6, x6, #0x1ff
-   102c8:	d2800648 	mov	x8, #0x32                  	// #50
-   102cc:	d341fd08 	lsr	x8, x8, #1
-   102d0:	926d0027 	and	x7, x1, #0x80000
-   102d4:	b40000a7 	cbz	x7, 102e8 <restarPrimeraBarra>
-   102d8:	8b0800c7 	add	x7, x6, x8
-   102dc:	f10604ff 	cmp	x7, #0x181
-   102e0:	54000040 	b.eq	102e8 <restarPrimeraBarra>
-   102e4:	9100077b 	add	x27, x27, #0x1
+0000000000010264 <barraVertical>:
+   10264:	f100c91f 	cmp	x8, #0x32
+   10268:	540000a0 	b.eq	1027c <barraTeminado>
+   1026c:	97ffffa7 	bl	10108 <print>
+   10270:	91000508 	add	x8, x8, #0x1
+   10274:	91080084 	add	x4, x4, #0x200
+   10278:	17fffffb 	b	10264 <barraVertical>
 
-00000000000102e8 <restarPrimeraBarra>:
-   102e8:	926c0027 	and	x7, x1, #0x100000
-   102ec:	b40000a7 	cbz	x7, 10300 <sumarSegundaBarra>
-   102f0:	cb0800c7 	sub	x7, x6, x8
-   102f4:	f10204ff 	cmp	x7, #0x81
-   102f8:	54000040 	b.eq	10300 <sumarSegundaBarra>
-   102fc:	d100077b 	sub	x27, x27, #0x1
+000000000001027c <barraTeminado>:
+   1027c:	910005ad 	add	x13, x13, #0x1
+   10280:	f10021bf 	cmp	x13, #0x8
+   10284:	54000120 	b.eq	102a8 <barra2>
+   10288:	d280010b 	mov	x11, #0x8                   	// #8
+   1028c:	d37ff96b 	lsl	x11, x11, #1
+   10290:	eb0b01bf 	cmp	x13, x11
+   10294:	54000240 	b.eq	102dc <listaBarra>
+   10298:	d28c800a 	mov	x10, #0x6400                	// #25600
+   1029c:	cb0a0084 	sub	x4, x4, x10
+   102a0:	91000484 	add	x4, x4, #0x1
+   102a4:	17ffffef 	b	10260 <puntoBarra>
 
-0000000000010300 <sumarSegundaBarra>:
-   10300:	92402346 	and	x6, x26, #0x1ff
-   10304:	d2800648 	mov	x8, #0x32                  	// #50
-   10308:	d341fd08 	lsr	x8, x8, #1
-   1030c:	926b0027 	and	x7, x1, #0x200000
-   10310:	b40000a7 	cbz	x7, 10324 <restarSegundaBarra>
-   10314:	8b0800c7 	add	x7, x6, x8
-   10318:	f10604ff 	cmp	x7, #0x181
-   1031c:	54000040 	b.eq	10324 <restarSegundaBarra>
-   10320:	9100075a 	add	x26, x26, #0x1
+00000000000102a8 <barra2>:
+   102a8:	aa1a03e7 	mov	x7, x26
+   102ac:	924020e7 	and	x7, x7, #0x1ff
+   102b0:	cb0600e7 	sub	x7, x7, x6
+   102b4:	d370fc2f 	lsr	x15, x1, #48
+   102b8:	92403def 	and	x15, x15, #0xffff
+   102bc:	aa0f03e4 	mov	x4, x15
+   102c0:	d377d884 	lsl	x4, x4, #9
+   102c4:	aa070084 	orr	x4, x4, x7
+   102c8:	d377d884 	lsl	x4, x4, #9
+   102cc:	d2803fea 	mov	x10, #0x1ff                 	// #511
+   102d0:	d100214a 	sub	x10, x10, #0x8
+   102d4:	aa0a0084 	orr	x4, x4, x10
+   102d8:	17ffffe2 	b	10260 <puntoBarra>
 
-0000000000010324 <restarSegundaBarra>:
-   10324:	926a0027 	and	x7, x1, #0x400000
-   10328:	b40000a7 	cbz	x7, 1033c <SiguientePosicionBarraTerminado>
-   1032c:	cb0800c7 	sub	x7, x6, x8
-   10330:	f10204ff 	cmp	x7, #0x81
-   10334:	54000040 	b.eq	1033c <SiguientePosicionBarraTerminado>
-   10338:	d100075a 	sub	x26, x26, #0x1
+00000000000102dc <listaBarra>:
+   102dc:	d61f03a0 	br	x29
 
-000000000001033c <SiguientePosicionBarraTerminado>:
-   1033c:	d61f03a0 	br	x29
+00000000000102e0 <SiguientePosicionBarra>:
+   102e0:	aa1e03fd 	mov	x29, x30
+   102e4:	aa1f03e5 	mov	x5, xzr
+   102e8:	aa1b03e6 	mov	x6, x27
+   102ec:	924020c6 	and	x6, x6, #0x1ff
+   102f0:	d2800648 	mov	x8, #0x32                  	// #50
+   102f4:	d341fd08 	lsr	x8, x8, #1
+   102f8:	926d0027 	and	x7, x1, #0x80000
+   102fc:	b40000a7 	cbz	x7, 10310 <restarPrimeraBarra>
+   10300:	8b0800c7 	add	x7, x6, x8
+   10304:	f10604ff 	cmp	x7, #0x181
+   10308:	54000040 	b.eq	10310 <restarPrimeraBarra>
+   1030c:	9100077b 	add	x27, x27, #0x1
 
-0000000000010340 <DibujarPelota>:
-   10340:	aa1e03fd 	mov	x29, x30
-   10344:	d280002d 	mov	x13, #0x1                   	// #1
-   10348:	92402067 	and	x7, x3, #0x1ff
-   1034c:	d28001c6 	mov	x6, #0xe                   	// #14
-   10350:	d341fcc6 	lsr	x6, x6, #1
-   10354:	cb0600e7 	sub	x7, x7, x6
-   10358:	d349fc68 	lsr	x8, x3, #9
-   1035c:	cb060108 	sub	x8, x8, x6
-   10360:	92402108 	and	x8, x8, #0x1ff
-   10364:	d29fffe4 	mov	x4, #0xffff                	// #65535
-   10368:	d377d884 	lsl	x4, x4, #9
-   1036c:	aa080084 	orr	x4, x4, x8
-   10370:	d377d884 	lsl	x4, x4, #9
-   10374:	aa070084 	orr	x4, x4, x7
+0000000000010310 <restarPrimeraBarra>:
+   10310:	926c0027 	and	x7, x1, #0x100000
+   10314:	b40000a7 	cbz	x7, 10328 <sumarSegundaBarra>
+   10318:	cb0800c7 	sub	x7, x6, x8
+   1031c:	f10204ff 	cmp	x7, #0x81
+   10320:	54000040 	b.eq	10328 <sumarSegundaBarra>
+   10324:	d100077b 	sub	x27, x27, #0x1
 
-0000000000010378 <puntoPelota>:
-   10378:	d2800008 	mov	x8, #0x0                   	// #0
+0000000000010328 <sumarSegundaBarra>:
+   10328:	92402346 	and	x6, x26, #0x1ff
+   1032c:	d2800648 	mov	x8, #0x32                  	// #50
+   10330:	d341fd08 	lsr	x8, x8, #1
+   10334:	926b0027 	and	x7, x1, #0x200000
+   10338:	b40000a7 	cbz	x7, 1034c <restarSegundaBarra>
+   1033c:	8b0800c7 	add	x7, x6, x8
+   10340:	f10604ff 	cmp	x7, #0x181
+   10344:	54000040 	b.eq	1034c <restarSegundaBarra>
+   10348:	9100075a 	add	x26, x26, #0x1
 
-000000000001037c <pelotaVertical>:
-   1037c:	f100391f 	cmp	x8, #0xe
-   10380:	540000a0 	b.eq	10394 <pelotaTeminado>
-   10384:	97ffff57 	bl	100e0 <print>
-   10388:	91000508 	add	x8, x8, #0x1
-   1038c:	91080084 	add	x4, x4, #0x200
-   10390:	17fffffb 	b	1037c <pelotaVertical>
+000000000001034c <restarSegundaBarra>:
+   1034c:	926a0027 	and	x7, x1, #0x400000
+   10350:	b40000a7 	cbz	x7, 10364 <SiguientePosicionBarraTerminado>
+   10354:	cb0800c7 	sub	x7, x6, x8
+   10358:	f10204ff 	cmp	x7, #0x81
+   1035c:	54000040 	b.eq	10364 <SiguientePosicionBarraTerminado>
+   10360:	d100075a 	sub	x26, x26, #0x1
 
-0000000000010394 <pelotaTeminado>:
-   10394:	910005ad 	add	x13, x13, #0x1
-   10398:	f10039bf 	cmp	x13, #0xe
-   1039c:	540000a0 	b.eq	103b0 <pelotaLista>
-   103a0:	d283800a 	mov	x10, #0x1c00                	// #7168
-   103a4:	cb0a0084 	sub	x4, x4, x10
-   103a8:	91000484 	add	x4, x4, #0x1
-   103ac:	17fffff3 	b	10378 <puntoPelota>
+0000000000010364 <SiguientePosicionBarraTerminado>:
+   10364:	d61f03a0 	br	x29
 
-00000000000103b0 <pelotaLista>:
-   103b0:	d61f03a0 	br	x29
+0000000000010368 <DibujarPelota>:
+   10368:	aa1e03fd 	mov	x29, x30
+   1036c:	d280002d 	mov	x13, #0x1                   	// #1
+   10370:	92402067 	and	x7, x3, #0x1ff
+   10374:	d28001c6 	mov	x6, #0xe                   	// #14
+   10378:	d341fcc6 	lsr	x6, x6, #1
+   1037c:	cb0600e7 	sub	x7, x7, x6
+   10380:	d349fc68 	lsr	x8, x3, #9
+   10384:	cb060108 	sub	x8, x8, x6
+   10388:	92402108 	and	x8, x8, #0x1ff
+   1038c:	d29fffe4 	mov	x4, #0xffff                	// #65535
+   10390:	d377d884 	lsl	x4, x4, #9
+   10394:	aa080084 	orr	x4, x4, x8
+   10398:	d377d884 	lsl	x4, x4, #9
+   1039c:	aa070084 	orr	x4, x4, x7
 
-00000000000103b4 <BorrarPelota>:
-   103b4:	aa1e03fd 	mov	x29, x30
-   103b8:	d280002d 	mov	x13, #0x1                   	// #1
-   103bc:	92402067 	and	x7, x3, #0x1ff
-   103c0:	d28001c6 	mov	x6, #0xe                   	// #14
-   103c4:	d341fcc6 	lsr	x6, x6, #1
-   103c8:	cb0600e7 	sub	x7, x7, x6
-   103cc:	d349fc68 	lsr	x8, x3, #9
-   103d0:	cb060108 	sub	x8, x8, x6
-   103d4:	92402108 	and	x8, x8, #0x1ff
-   103d8:	d2800004 	mov	x4, #0x0                   	// #0
-   103dc:	d377d884 	lsl	x4, x4, #9
-   103e0:	aa080084 	orr	x4, x4, x8
-   103e4:	d377d884 	lsl	x4, x4, #9
-   103e8:	aa070084 	orr	x4, x4, x7
+00000000000103a0 <puntoPelota>:
+   103a0:	d2800008 	mov	x8, #0x0                   	// #0
 
-00000000000103ec <puntoPelotab>:
-   103ec:	d2800008 	mov	x8, #0x0                   	// #0
+00000000000103a4 <pelotaVertical>:
+   103a4:	f100391f 	cmp	x8, #0xe
+   103a8:	540000a0 	b.eq	103bc <pelotaTeminado>
+   103ac:	97ffff57 	bl	10108 <print>
+   103b0:	91000508 	add	x8, x8, #0x1
+   103b4:	91080084 	add	x4, x4, #0x200
+   103b8:	17fffffb 	b	103a4 <pelotaVertical>
 
-00000000000103f0 <pelotaVerticalb>:
-   103f0:	f100391f 	cmp	x8, #0xe
-   103f4:	540000a0 	b.eq	10408 <pelotaTeminadob>
-   103f8:	97ffff3a 	bl	100e0 <print>
-   103fc:	91000508 	add	x8, x8, #0x1
-   10400:	91080084 	add	x4, x4, #0x200
-   10404:	17fffffb 	b	103f0 <pelotaVerticalb>
+00000000000103bc <pelotaTeminado>:
+   103bc:	910005ad 	add	x13, x13, #0x1
+   103c0:	f10039bf 	cmp	x13, #0xe
+   103c4:	540000a0 	b.eq	103d8 <pelotaLista>
+   103c8:	d283800a 	mov	x10, #0x1c00                	// #7168
+   103cc:	cb0a0084 	sub	x4, x4, x10
+   103d0:	91000484 	add	x4, x4, #0x1
+   103d4:	17fffff3 	b	103a0 <puntoPelota>
 
-0000000000010408 <pelotaTeminadob>:
-   10408:	910005ad 	add	x13, x13, #0x1
-   1040c:	f10039bf 	cmp	x13, #0xe
-   10410:	540000a0 	b.eq	10424 <pelotaListab>
-   10414:	d283800a 	mov	x10, #0x1c00                	// #7168
-   10418:	cb0a0084 	sub	x4, x4, x10
-   1041c:	91000484 	add	x4, x4, #0x1
-   10420:	17fffff3 	b	103ec <puntoPelotab>
+00000000000103d8 <pelotaLista>:
+   103d8:	d61f03a0 	br	x29
 
-0000000000010424 <pelotaListab>:
-   10424:	d61f03a0 	br	x29
+00000000000103dc <BorrarPelota>:
+   103dc:	aa1e03fd 	mov	x29, x30
+   103e0:	d280002d 	mov	x13, #0x1                   	// #1
+   103e4:	92402067 	and	x7, x3, #0x1ff
+   103e8:	d28001c6 	mov	x6, #0xe                   	// #14
+   103ec:	d341fcc6 	lsr	x6, x6, #1
+   103f0:	cb0600e7 	sub	x7, x7, x6
+   103f4:	d349fc68 	lsr	x8, x3, #9
+   103f8:	cb060108 	sub	x8, x8, x6
+   103fc:	92402108 	and	x8, x8, #0x1ff
+   10400:	d2800004 	mov	x4, #0x0                   	// #0
+   10404:	d377d884 	lsl	x4, x4, #9
+   10408:	aa080084 	orr	x4, x4, x8
+   1040c:	d377d884 	lsl	x4, x4, #9
+   10410:	aa070084 	orr	x4, x4, x7
 
-0000000000010428 <CambiarDireccionPelota>:
-   10428:	92651043 	and	x3, x2, #0xf8000000
-   1042c:	d35afc63 	lsr	x3, x3, #26
-   10430:	b4001403 	cbz	x3, 106b0 <alTreinta>
-   10434:	f1002c7f 	cmp	x3, #0xb
-   10438:	54000480 	b.eq	104c8 <tocapared>
-   1043c:	f100307f 	cmp	x3, #0xc
-   10440:	54000440 	b.eq	104c8 <tocapared>
-   10444:	f100247f 	cmp	x3, #0x9
-   10448:	54000320 	b.eq	104ac <pabajo>
-   1044c:	f100147f 	cmp	x3, #0x5
-   10450:	540002e0 	b.eq	104ac <pabajo>
-   10454:	f100287f 	cmp	x3, #0xa
-   10458:	540001e0 	b.eq	10494 <diagoabajo>
-   1045c:	f100107f 	cmp	x3, #0x4
-   10460:	540001a0 	b.eq	10494 <diagoabajo>
-   10464:	f100207f 	cmp	x3, #0x8
-   10468:	54000260 	b.eq	104b4 <almedio>
-   1046c:	f1000c7f 	cmp	x3, #0x3
-   10470:	54000220 	b.eq	104b4 <almedio>
-   10474:	f1001c7f 	cmp	x3, #0x7
-   10478:	54000120 	b.eq	1049c <diagoarriba>
-   1047c:	f100087f 	cmp	x3, #0x2
-   10480:	540000e0 	b.eq	1049c <diagoarriba>
-   10484:	f100187f 	cmp	x3, #0x6
-   10488:	540000e0 	b.eq	104a4 <parriba>
-   1048c:	f100047f 	cmp	x3, #0x1
-   10490:	540000a0 	b.eq	104a4 <parriba>
+0000000000010414 <puntoPelotab>:
+   10414:	d2800008 	mov	x8, #0x0                   	// #0
 
-0000000000010494 <diagoabajo>:
-   10494:	d2800004 	mov	x4, #0x0                   	// #0
-   10498:	14000009 	b	104bc <cambiodireccion>
+0000000000010418 <pelotaVerticalb>:
+   10418:	f100391f 	cmp	x8, #0xe
+   1041c:	540000a0 	b.eq	10430 <pelotaTeminadob>
+   10420:	97ffff3a 	bl	10108 <print>
+   10424:	91000508 	add	x8, x8, #0x1
+   10428:	91080084 	add	x4, x4, #0x200
+   1042c:	17fffffb 	b	10418 <pelotaVerticalb>
 
-000000000001049c <diagoarriba>:
-   1049c:	d2800084 	mov	x4, #0x4                   	// #4
-   104a0:	14000007 	b	104bc <cambiodireccion>
+0000000000010430 <pelotaTeminadob>:
+   10430:	910005ad 	add	x13, x13, #0x1
+   10434:	f10039bf 	cmp	x13, #0xe
+   10438:	540000a0 	b.eq	1044c <pelotaListab>
+   1043c:	d283800a 	mov	x10, #0x1c00                	// #7168
+   10440:	cb0a0084 	sub	x4, x4, x10
+   10444:	91000484 	add	x4, x4, #0x1
+   10448:	17fffff3 	b	10414 <puntoPelotab>
 
-00000000000104a4 <parriba>:
-   104a4:	d28000a4 	mov	x4, #0x5                   	// #5
-   104a8:	14000005 	b	104bc <cambiodireccion>
+000000000001044c <pelotaListab>:
+   1044c:	d61f03a0 	br	x29
 
-00000000000104ac <pabajo>:
-   104ac:	d2800024 	mov	x4, #0x1                   	// #1
-   104b0:	14000003 	b	104bc <cambiodireccion>
+0000000000010450 <CambiarDireccionPelota>:
+   10450:	92651043 	and	x3, x2, #0xf8000000
+   10454:	d35afc63 	lsr	x3, x3, #26
+   10458:	b4001403 	cbz	x3, 106d8 <alTreinta>
+   1045c:	f1002c7f 	cmp	x3, #0xb
+   10460:	54000480 	b.eq	104f0 <tocapared>
+   10464:	f100307f 	cmp	x3, #0xc
+   10468:	54000440 	b.eq	104f0 <tocapared>
+   1046c:	f100247f 	cmp	x3, #0x9
+   10470:	54000320 	b.eq	104d4 <pabajo>
+   10474:	f100147f 	cmp	x3, #0x5
+   10478:	540002e0 	b.eq	104d4 <pabajo>
+   1047c:	f100287f 	cmp	x3, #0xa
+   10480:	540001e0 	b.eq	104bc <diagoabajo>
+   10484:	f100107f 	cmp	x3, #0x4
+   10488:	540001a0 	b.eq	104bc <diagoabajo>
+   1048c:	f100207f 	cmp	x3, #0x8
+   10490:	54000260 	b.eq	104dc <almedio>
+   10494:	f1000c7f 	cmp	x3, #0x3
+   10498:	54000220 	b.eq	104dc <almedio>
+   1049c:	f1001c7f 	cmp	x3, #0x7
+   104a0:	54000120 	b.eq	104c4 <diagoarriba>
+   104a4:	f100087f 	cmp	x3, #0x2
+   104a8:	540000e0 	b.eq	104c4 <diagoarriba>
+   104ac:	f100187f 	cmp	x3, #0x6
+   104b0:	540000e0 	b.eq	104cc <parriba>
+   104b4:	f100047f 	cmp	x3, #0x1
+   104b8:	540000a0 	b.eq	104cc <parriba>
 
-00000000000104b4 <almedio>:
-   104b4:	d2800044 	mov	x4, #0x2                   	// #2
-   104b8:	14000001 	b	104bc <cambiodireccion>
+00000000000104bc <diagoabajo>:
+   104bc:	d2800004 	mov	x4, #0x0                   	// #0
+   104c0:	14000009 	b	104e4 <cambiodireccion>
 
-00000000000104bc <cambiodireccion>:
-   104bc:	b36e0882 	bfi	x2, x4, #18, #3
-   104c0:	d26c0042 	eor	x2, x2, #0x100000
-   104c4:	d61f03c0 	br	x30
+00000000000104c4 <diagoarriba>:
+   104c4:	d2800084 	mov	x4, #0x4                   	// #4
+   104c8:	14000007 	b	104e4 <cambiodireccion>
 
-00000000000104c8 <tocapared>:
-   104c8:	d61f03c0 	br	x30
+00000000000104cc <parriba>:
+   104cc:	d28000a4 	mov	x4, #0x5                   	// #5
+   104d0:	14000005 	b	104e4 <cambiodireccion>
 
-00000000000104cc <MoverPelota>:
-   104cc:	aa1e03f5 	mov	x21, x30
-   104d0:	97ffffb9 	bl	103b4 <BorrarPelota>
-   104d4:	9400001a 	bl	1053c <CheckPelota>
-   104d8:	aa0203e9 	mov	x9, x2
-   104dc:	927f0128 	and	x8, x9, #0x2
-   104e0:	b50001e8 	cbnz	x8, 1051c <horizontal>
-   104e4:	d280002a 	mov	x10, #0x1                   	// #1
-   104e8:	d280002b 	mov	x11, #0x1                   	// #1
-   104ec:	92400128 	and	x8, x9, #0x1
-   104f0:	b5000068 	cbnz	x8, 104fc <diagoexterna>
-   104f4:	9100054a 	add	x10, x10, #0x1
-   104f8:	14000002 	b	10500 <saltoInterna>
+00000000000104d4 <pabajo>:
+   104d4:	d2800024 	mov	x4, #0x1                   	// #1
+   104d8:	14000003 	b	104e4 <cambiodireccion>
 
-00000000000104fc <diagoexterna>:
-   104fc:	9100056b 	add	x11, x11, #0x1
+00000000000104dc <almedio>:
+   104dc:	d2800044 	mov	x4, #0x2                   	// #2
+   104e0:	14000001 	b	104e4 <cambiodireccion>
 
-0000000000010500 <saltoInterna>:
-   10500:	927e0128 	and	x8, x9, #0x4
-   10504:	d377d96b 	lsl	x11, x11, #9
-   10508:	b5000068 	cbnz	x8, 10514 <arriba>
-   1050c:	8b0b0063 	add	x3, x3, x11
-   10510:	14000004 	b	10520 <verdireccion>
+00000000000104e4 <cambiodireccion>:
+   104e4:	b36e0882 	bfi	x2, x4, #18, #3
+   104e8:	d26c0042 	eor	x2, x2, #0x100000
+   104ec:	d61f03c0 	br	x30
 
-0000000000010514 <arriba>:
-   10514:	cb0b0063 	sub	x3, x3, x11
-   10518:	14000002 	b	10520 <verdireccion>
+00000000000104f0 <tocapared>:
+   104f0:	d61f03c0 	br	x30
 
-000000000001051c <horizontal>:
-   1051c:	d280006a 	mov	x10, #0x3                   	// #3
+00000000000104f4 <MoverPelota>:
+   104f4:	aa1e03f5 	mov	x21, x30
+   104f8:	97ffffb9 	bl	103dc <BorrarPelota>
+   104fc:	9400001a 	bl	10564 <CheckPelota>
+   10500:	aa0203e9 	mov	x9, x2
+   10504:	927f0128 	and	x8, x9, #0x2
+   10508:	b50001e8 	cbnz	x8, 10544 <horizontal>
+   1050c:	d280002a 	mov	x10, #0x1                   	// #1
+   10510:	d280002b 	mov	x11, #0x1                   	// #1
+   10514:	92400128 	and	x8, x9, #0x1
+   10518:	b5000068 	cbnz	x8, 10524 <diagoexterna>
+   1051c:	9100054a 	add	x10, x10, #0x1
+   10520:	14000002 	b	10528 <saltoInterna>
 
-0000000000010520 <verdireccion>:
-   10520:	927d0128 	and	x8, x9, #0x8
-   10524:	b4000068 	cbz	x8, 10530 <izquierda>
-   10528:	8b0a0063 	add	x3, x3, x10
-   1052c:	14000002 	b	10534 <termine>
+0000000000010524 <diagoexterna>:
+   10524:	9100056b 	add	x11, x11, #0x1
 
-0000000000010530 <izquierda>:
-   10530:	cb0a0063 	sub	x3, x3, x10
+0000000000010528 <saltoInterna>:
+   10528:	927e0128 	and	x8, x9, #0x4
+   1052c:	d377d96b 	lsl	x11, x11, #9
+   10530:	b5000068 	cbnz	x8, 1053c <arriba>
+   10534:	8b0b0063 	add	x3, x3, x11
+   10538:	14000004 	b	10548 <verdireccion>
 
-0000000000010534 <termine>:
-   10534:	97ffff83 	bl	10340 <DibujarPelota>
-   10538:	d61f02a0 	br	x21
+000000000001053c <arriba>:
+   1053c:	cb0b0063 	sub	x3, x3, x11
+   10540:	14000002 	b	10548 <verdireccion>
 
-000000000001053c <CheckPelota>:
-   1053c:	92402065 	and	x5, x3, #0x1ff
-   10540:	d349fc64 	lsr	x4, x3, #9
-   10544:	d1001c84 	sub	x4, x4, #0x7
-   10548:	92402084 	and	x4, x4, #0x1ff
-   1054c:	f102009f 	cmp	x4, #0x80
-   10550:	5400016d 	b.le	1057c <tocalado>
-   10554:	91003c84 	add	x4, x4, #0xf
-   10558:	f106009f 	cmp	x4, #0x180
-   1055c:	5400010a 	b.ge	1057c <tocalado>
+0000000000010544 <horizontal>:
+   10544:	d280006a 	mov	x10, #0x3                   	// #3
 
-0000000000010560 <sigo>:
-   10560:	d28001c6 	mov	x6, #0xe                   	// #14
-   10564:	eb0600bf 	cmp	x5, x6
-   10568:	540004ed 	b.le	10604 <tocaizquierda>
-   1056c:	8b0500c7 	add	x7, x6, x5
-   10570:	f107fcff 	cmp	x7, #0x1ff
-   10574:	540000aa 	b.ge	10588 <tocaderecha>
-   10578:	d61f03c0 	br	x30
+0000000000010548 <verdireccion>:
+   10548:	927d0128 	and	x8, x9, #0x8
+   1054c:	b4000068 	cbz	x8, 10558 <izquierda>
+   10550:	8b0a0063 	add	x3, x3, x10
+   10554:	14000002 	b	1055c <termine>
 
-000000000001057c <tocalado>:
-   1057c:	d280008b 	mov	x11, #0x4                   	// #4
-   10580:	ca0b0042 	eor	x2, x2, x11
-   10584:	17fffff7 	b	10560 <sigo>
+0000000000010558 <izquierda>:
+   10558:	cb0a0063 	sub	x3, x3, x10
 
-0000000000010588 <tocaderecha>:
-   10588:	d280064d 	mov	x13, #0x32                  	// #50
-   1058c:	d341fdad 	lsr	x13, x13, #1
-   10590:	8b1a01ac 	add	x12, x13, x26
-   10594:	eb0c009f 	cmp	x4, x12
-   10598:	5400074a 	b.ge	10680 <punto>
-   1059c:	cb0d034c 	sub	x12, x26, x13
-   105a0:	eb0c009f 	cmp	x4, x12
-   105a4:	540006ed 	b.le	10680 <punto>
-   105a8:	910055ad 	add	x13, x13, #0x15
-   105ac:	8b0d034b 	add	x11, x26, x13
-   105b0:	eb0b009f 	cmp	x4, x11
-   105b4:	5400006d 	b.le	105c0 <noabajo>
-   105b8:	d2800022 	mov	x2, #0x1                   	// #1
-   105bc:	d61f03c0 	br	x30
+000000000001055c <termine>:
+   1055c:	97ffff83 	bl	10368 <DibujarPelota>
+   10560:	d61f02a0 	br	x21
 
-00000000000105c0 <noabajo>:
-   105c0:	d100296b 	sub	x11, x11, #0xa
-   105c4:	eb0b009f 	cmp	x4, x11
-   105c8:	5400006d 	b.le	105d4 <nodiagoabajo>
-   105cc:	d2800002 	mov	x2, #0x0                   	// #0
-   105d0:	d61f03c0 	br	x30
+0000000000010564 <CheckPelota>:
+   10564:	92402065 	and	x5, x3, #0x1ff
+   10568:	d349fc64 	lsr	x4, x3, #9
+   1056c:	d1001c84 	sub	x4, x4, #0x7
+   10570:	92402084 	and	x4, x4, #0x1ff
+   10574:	f102009f 	cmp	x4, #0x80
+   10578:	5400016d 	b.le	105a4 <tocalado>
+   1057c:	91003c84 	add	x4, x4, #0xf
+   10580:	f106009f 	cmp	x4, #0x180
+   10584:	5400010a 	b.ge	105a4 <tocalado>
 
-00000000000105d4 <nodiagoabajo>:
-   105d4:	d1003d6b 	sub	x11, x11, #0xf
+0000000000010588 <sigo>:
+   10588:	d28001c6 	mov	x6, #0xe                   	// #14
+   1058c:	eb0600bf 	cmp	x5, x6
+   10590:	540004ed 	b.le	1062c <tocaizquierda>
+   10594:	8b0500c7 	add	x7, x6, x5
+   10598:	f107fcff 	cmp	x7, #0x1ff
+   1059c:	540000aa 	b.ge	105b0 <tocaderecha>
+   105a0:	d61f03c0 	br	x30
+
+00000000000105a4 <tocalado>:
+   105a4:	d280008b 	mov	x11, #0x4                   	// #4
+   105a8:	ca0b0042 	eor	x2, x2, x11
+   105ac:	17fffff7 	b	10588 <sigo>
+
+00000000000105b0 <tocaderecha>:
+   105b0:	d280064d 	mov	x13, #0x32                  	// #50
+   105b4:	d341fdad 	lsr	x13, x13, #1
+   105b8:	8b1a01ac 	add	x12, x13, x26
+   105bc:	eb0c009f 	cmp	x4, x12
+   105c0:	5400074a 	b.ge	106a8 <punto>
+   105c4:	cb0d034c 	sub	x12, x26, x13
+   105c8:	eb0c009f 	cmp	x4, x12
+   105cc:	540006ed 	b.le	106a8 <punto>
+   105d0:	910055ad 	add	x13, x13, #0x15
+   105d4:	8b0d034b 	add	x11, x26, x13
    105d8:	eb0b009f 	cmp	x4, x11
-   105dc:	5400006d 	b.le	105e8 <nomedio>
-   105e0:	d2800042 	mov	x2, #0x2                   	// #2
+   105dc:	5400006d 	b.le	105e8 <noabajo>
+   105e0:	d2800022 	mov	x2, #0x1                   	// #1
    105e4:	d61f03c0 	br	x30
 
-00000000000105e8 <nomedio>:
+00000000000105e8 <noabajo>:
    105e8:	d100296b 	sub	x11, x11, #0xa
    105ec:	eb0b009f 	cmp	x4, x11
-   105f0:	5400006d 	b.le	105fc <nodiagoarriba>
-   105f4:	d2800082 	mov	x2, #0x4                   	// #4
+   105f0:	5400006d 	b.le	105fc <nodiagoabajo>
+   105f4:	d2800002 	mov	x2, #0x0                   	// #0
    105f8:	d61f03c0 	br	x30
 
-00000000000105fc <nodiagoarriba>:
-   105fc:	d28000a2 	mov	x2, #0x5                   	// #5
-   10600:	d61f03c0 	br	x30
+00000000000105fc <nodiagoabajo>:
+   105fc:	d1003d6b 	sub	x11, x11, #0xf
+   10600:	eb0b009f 	cmp	x4, x11
+   10604:	5400006d 	b.le	10610 <nomedio>
+   10608:	d2800042 	mov	x2, #0x2                   	// #2
+   1060c:	d61f03c0 	br	x30
 
-0000000000010604 <tocaizquierda>:
-   10604:	d28008ed 	mov	x13, #0x47                  	// #71
-   10608:	d341fdad 	lsr	x13, x13, #1
-   1060c:	8b1b01ac 	add	x12, x13, x27
-   10610:	eb0c009f 	cmp	x4, x12
-   10614:	5400038a 	b.ge	10684 <punto2>
-   10618:	cb0d036c 	sub	x12, x27, x13
-   1061c:	eb0c009f 	cmp	x4, x12
-   10620:	5400032d 	b.le	10684 <punto2>
-   10624:	910055ad 	add	x13, x13, #0x15
-   10628:	8b0d036b 	add	x11, x27, x13
-   1062c:	eb0b009f 	cmp	x4, x11
-   10630:	5400006d 	b.le	1063c <noabajoi>
-   10634:	d2800122 	mov	x2, #0x9                   	// #9
-   10638:	d61f03c0 	br	x30
+0000000000010610 <nomedio>:
+   10610:	d100296b 	sub	x11, x11, #0xa
+   10614:	eb0b009f 	cmp	x4, x11
+   10618:	5400006d 	b.le	10624 <nodiagoarriba>
+   1061c:	d2800082 	mov	x2, #0x4                   	// #4
+   10620:	d61f03c0 	br	x30
 
-000000000001063c <noabajoi>:
-   1063c:	d100296b 	sub	x11, x11, #0xa
-   10640:	eb0b009f 	cmp	x4, x11
-   10644:	5400006d 	b.le	10650 <nodiagoabajoi>
-   10648:	d2800102 	mov	x2, #0x8                   	// #8
-   1064c:	d61f03c0 	br	x30
+0000000000010624 <nodiagoarriba>:
+   10624:	d28000a2 	mov	x2, #0x5                   	// #5
+   10628:	d61f03c0 	br	x30
 
-0000000000010650 <nodiagoabajoi>:
-   10650:	d1003d6b 	sub	x11, x11, #0xf
+000000000001062c <tocaizquierda>:
+   1062c:	d28008ed 	mov	x13, #0x47                  	// #71
+   10630:	d341fdad 	lsr	x13, x13, #1
+   10634:	8b1b01ac 	add	x12, x13, x27
+   10638:	eb0c009f 	cmp	x4, x12
+   1063c:	5400038a 	b.ge	106ac <punto2>
+   10640:	cb0d036c 	sub	x12, x27, x13
+   10644:	eb0c009f 	cmp	x4, x12
+   10648:	5400032d 	b.le	106ac <punto2>
+   1064c:	910055ad 	add	x13, x13, #0x15
+   10650:	8b0d036b 	add	x11, x27, x13
    10654:	eb0b009f 	cmp	x4, x11
-   10658:	5400006d 	b.le	10664 <nomedioi>
-   1065c:	d2800142 	mov	x2, #0xa                   	// #10
+   10658:	5400006d 	b.le	10664 <noabajoi>
+   1065c:	d2800122 	mov	x2, #0x9                   	// #9
    10660:	d61f03c0 	br	x30
 
-0000000000010664 <nomedioi>:
+0000000000010664 <noabajoi>:
    10664:	d100296b 	sub	x11, x11, #0xa
    10668:	eb0b009f 	cmp	x4, x11
-   1066c:	5400006d 	b.le	10678 <nodiagoarribai>
-   10670:	d2800182 	mov	x2, #0xc                   	// #12
+   1066c:	5400006d 	b.le	10678 <nodiagoabajoi>
+   10670:	d2800102 	mov	x2, #0x8                   	// #8
    10674:	d61f03c0 	br	x30
 
-0000000000010678 <nodiagoarribai>:
-   10678:	d28001a2 	mov	x2, #0xd                   	// #13
-   1067c:	d61f03c0 	br	x30
+0000000000010678 <nodiagoabajoi>:
+   10678:	d1003d6b 	sub	x11, x11, #0xf
+   1067c:	eb0b009f 	cmp	x4, x11
+   10680:	5400006d 	b.le	1068c <nomedioi>
+   10684:	d2800142 	mov	x2, #0xa                   	// #10
+   10688:	d61f03c0 	br	x30
 
-0000000000010680 <punto>:
-   10680:	17fffe88 	b	100a0 <app>
+000000000001068c <nomedioi>:
+   1068c:	d100296b 	sub	x11, x11, #0xa
+   10690:	eb0b009f 	cmp	x4, x11
+   10694:	5400006d 	b.le	106a0 <nodiagoarribai>
+   10698:	d2800182 	mov	x2, #0xc                   	// #12
+   1069c:	d61f03c0 	br	x30
 
-0000000000010684 <punto2>:
-   10684:	17fffe87 	b	100a0 <app>
+00000000000106a0 <nodiagoarribai>:
+   106a0:	d28001a2 	mov	x2, #0xd                   	// #13
+   106a4:	d61f03c0 	br	x30
 
-0000000000010688 <tocabarra>:
-   10688:	d2a0040b 	mov	x11, #0x200000              	// #2097152
-   1068c:	ca0b0063 	eor	x3, x3, x11
-   10690:	d61f03c0 	br	x30
+00000000000106a8 <punto>:
+   106a8:	17fffe7e 	b	100a0 <app>
 
-0000000000010694 <chocapared>:
-   10694:	d26d0042 	eor	x2, x2, #0x80000
+00000000000106ac <punto2>:
+   106ac:	17fffe7d 	b	100a0 <app>
 
-0000000000010698 <InicioPelota>:
-   10698:	926a0c43 	and	x3, x2, #0x3c00000
-   1069c:	d2814026 	mov	x6, #0xa01                 	// #2561
-   106a0:	d378dcc6 	lsl	x6, x6, #8
-   106a4:	aa0603e2 	mov	x2, x6
-   106a8:	8b030042 	add	x2, x2, x3
-   106ac:	d61f03c0 	br	x30
+00000000000106b0 <tocabarra>:
+   106b0:	d2a0040b 	mov	x11, #0x200000              	// #2097152
+   106b4:	ca0b0063 	eor	x3, x3, x11
+   106b8:	d61f03c0 	br	x30
 
-00000000000106b0 <alTreinta>:
-   106b0:	d61f03c0 	br	x30
+00000000000106bc <chocapared>:
+   106bc:	d26d0042 	eor	x2, x2, #0x80000
 
-00000000000106b4 <alveintinueve>:
-   106b4:	d61f03a0 	br	x29
+00000000000106c0 <InicioPelota>:
+   106c0:	926a0c43 	and	x3, x2, #0x3c00000
+   106c4:	d2814026 	mov	x6, #0xa01                 	// #2561
+   106c8:	d378dcc6 	lsl	x6, x6, #8
+   106cc:	aa0603e2 	mov	x2, x6
+   106d0:	8b030042 	add	x2, x2, x3
+   106d4:	d61f03c0 	br	x30
+
+00000000000106d8 <alTreinta>:
+   106d8:	d61f03c0 	br	x30
+
+00000000000106dc <alveintinueve>:
+   106dc:	d61f03a0 	br	x29
