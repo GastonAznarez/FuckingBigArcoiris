@@ -105,6 +105,7 @@ timerCount:						//Se ejecuta cada TIME_COUNTER veces
 
 	mov x25, TIME_COUNTER		//Se vuelve a setear en su calor
 	bl MoverPelota
+	bl lineaVertical
 	b appLoop					//Volvemos al loop principal
 
 restart:		//Reinicia el juego
