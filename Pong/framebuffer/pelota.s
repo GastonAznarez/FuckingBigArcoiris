@@ -315,7 +315,7 @@ sigo:
 
 
 tocaderecha:
-    mov x13, BARRA_ALTO+ PELOTA
+    mov x13, BARRA_ALTO + PELOTA
     lsr x13, x13, 1
     add x12, x13, x26
     cmp x4, x12
@@ -358,42 +358,47 @@ tocaderecha:
 
 
 tocaizquierda:
-    mov x13, BARRA_ALTO + PELOTA
-    lsr x13, x13, 1
-    add x12, x13, x27
-    cmp x4, x12
-    b.ge punto2
-    sub x12, x27, x13
-    cmp x4, x12
-    b.le punto2
+mov x13, BARRA_ALTO + PELOTA
+lsr x13, x13, 1
+add x12, x13, x27
+cmp x4, x12
+b.ge punto2
+sub x12, x27, x13
+cmp x4, x12
+b.le punto2
 
-    mov x13, 21
-    add x11, x27, x13
-    cmp x4, x11
-    b.le noabajoi
-    mov x2, 0x9
-    br x30
-    noabajoi:
-    sub x11, x11, 10
-    cmp x4, x11
-    b.le nodiagoabajoi
-    mov x2, 8
-    br x30
-  nodiagoabajoi:
-    sub x11, x11, 15
-    cmp x4, x11
-    b.le nomedioi
-    mov x2, 10
-    br x30
-    nomedioi:
-    sub x11, x11, 10
-    cmp x4, x11
-    b.le nodiagoarribai
-    mov x2, 12
-    br x30
-    nodiagoarribai:
-    mov x2, 13
-    br x30
+mov x13, 21
+add x11, x27, x13
+cmp x4, x11
+b.le noabajoi
+mov x2, 0x1
+br x30
+noabajoi:
+sub x11, x11, 10
+cmp x4, x11
+b.le nodiagoabajoi
+mov x2, 0
+br x30
+nodiagoabajoi:
+sub x11, x11, 15
+cmp x4, x11
+b.le nomedioi
+mov x2, 2
+br x30
+nomedioi:
+sub x11, x11, 10
+cmp x4, x11
+b.le nodiagoarribai
+mov x2, 4
+br x30
+nodiagoarribai:
+mov x2, 5
+br x30
+
+
+
+
+
 
 
 
