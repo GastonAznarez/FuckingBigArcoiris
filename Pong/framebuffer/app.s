@@ -82,6 +82,8 @@ app:
 	lsl x3, x3, 8
 	mov x2, 0x7
 
+	bl PruebaRectangulo
+
 
 appLoop:
 
@@ -251,31 +253,31 @@ InfLoop:
     orr x4, x4, x11
 		sub x15, x13, x11
 		sub x16, x14, x12
+		mov x17, 0
   puntoRectangulo:             //Punto de partida de dibujar eje Y
 	  mov x8, #0              //Contador vertical
-
   rectanguloVertical:
         subs xzr, x8, x16
-        b.eq rectanguloTeminado          //Si el contador llego al limite, termina o aumenta el X
+        b.eq columnaaTerminado          //Si el contador llego al limite, termina o aumenta el X
     	bl print
     	add x8, x8, #1              //Sumo uno al contador
     	add x4, x4, BARRA_UNIDAD_Y  //Sumo 1 al eje Y
 
     	b rectanguloVertical             //Recurcion
 
-rectanguloTeminado:
+columnaaTerminado:
 
-    add x13, x13, #1                  //Se termino de pintar una columna
+    add x17, x17, #1                  //Se termino de pintar una columna
 
-    subs xzr, x13, x15
+    subs xzr, x15, x17
     b.eq rectListo                    //Branch de configuracion si se termino la primer barra, sinio aumentamos x
 
-		lsl x17, x16, 9
-    sub x4, x4, x17             //Le resto los 50 lugares que me adelante en el Y de
+	lsl x18, x16, 9
+    sub x4, x4, x18             //Le resto los 50 lugares que me adelante en el Y de
 
     add x4, x4, #1                  //Le sumo 1 al eje X
 
-    b puntorectangulo
+    b puntoRectangulo
 
-    rectlisto:
+rectListo:
     br x29

@@ -13,6 +13,8 @@
         //DESCRIPCION: Aumenta un punto al contador del jugador 2.
         //USA: Estado pelota [27:31]
 
+    .global PruebaRectangulo
+
 
 
 //------FIN DEFINICION DE FUNCIONES-------//
@@ -79,15 +81,75 @@ horizontalTerminado:
 
 PruebaRectangulo:
 
-mov x29, x30
-
-mov x9, #0
-mov x10, 0x00A
-lsl x10, 9
-orr x10, x10, 0x00A
+mov x28, x30
+//1
+mov x9, 30
+lsl x9, x9, 9
+mov x22, 140
+orr x9, x9, x22
+mov x10, 98
+lsl x10, x10, 9
+mov x21, 155
+orr x10, x10, x21
 bl DibujarRectangulo
 
-br x29
+//2
+mov x23, 162
+
+mov x9, 30
+lsl x9, x9, 9
+add x22,x23, 150
+orr x9, x9, x22
+mov x10, 45
+lsl x10, x10, 9
+add x21,x23, 200
+orr x10, x10, x21
+bl DibujarRectangulo
+
+
+
+mov x9, 45
+lsl x9, x9, 9
+add x22,x23, 185
+orr x9, x9, x22
+mov x10, 56
+lsl x10, x10, 9
+add x21,x23, 200
+orr x10, x10, x21
+bl DibujarRectangulo
+
+mov x9, 56
+lsl x9, x9, 9
+add x22,x23, 150
+orr x9, x9, x22
+mov x10, 71
+lsl x10, x10, 9
+add x21,x23, 200
+orr x10, x10, x21
+bl DibujarRectangulo
+
+mov x9, 71
+lsl x9, x9, 9
+add x22,x23, 150
+orr x9, x9, x22
+mov x10, 83
+lsl x10, x10, 9
+add x21,x23, 165
+orr x10, x10, x21
+bl DibujarRectangulo
+
+mov x9, 83
+lsl x9, x9, 9
+add x22,x23, 150
+orr x9, x9, x22
+mov x10, 98
+lsl x10, x10, 9
+add x21,x23, 200
+orr x10, x10, x21
+bl DibujarRectangulo
+br x28
+
+
 
 
 //-------FIN DE CODIGO----------//
