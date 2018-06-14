@@ -49,7 +49,7 @@
 	.equ BLANCO,			   0xFFFF
 	.equ NEGRO,				   0x0000
 
-	.equ TIME_COUNTER,		   0x20
+	.equ TIME_COUNTER,		   0x15
 
 // Return CPU ID (0..3) Of The CPU Executed On
 	mrs x0,MPIDR_EL1 // X0 = Multiprocessor Affinity Register (MPIDR)

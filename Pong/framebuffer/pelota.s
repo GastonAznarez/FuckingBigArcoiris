@@ -315,7 +315,7 @@ sigo:
 
 
 tocaderecha:
-    mov x13, BARRA_ALTO
+    mov x13, BARRA_ALTO+ PELOTA
     lsr x13, x13, 1
     add x12, x13, x26
     cmp x4, x12
@@ -323,7 +323,8 @@ tocaderecha:
     sub x12, x26, x13
     cmp x4, x12
     b.le punto
-    add x13, x13, PELOTA
+
+    mov x13, 21
     add x11, x26, x13
     cmp x4, x11
     b.le noabajo
@@ -366,7 +367,7 @@ tocaizquierda:
     cmp x4, x12
     b.le punto2
 
-    add x13, x13, PELOTA
+    mov x13, 21
     add x11, x27, x13
     cmp x4, x11
     b.le noabajoi
