@@ -51,7 +51,7 @@
 		[9:17] = y
 		[18:33] = color
 
-	x25 = Contador general
+	x25 = Time Counter
 	x26 = [0:8] posicion de la barra 1
 	x27 = [0:8] posicion de la barra 2
 
@@ -67,16 +67,18 @@
 
 .global print
 
+.global restart
+
 //--------FIN DEFINICION DE FUNCIONES-------//
 
 //--------------CODIGO----------------------//
 app:
 
-	mov x25, TIME_COUNTER
+	mov x25, TIME_COUNTER		//Contador para ejecutar el codigo en timerCount
 
-	bl iniciarFondo
+	bl iniciarFondo				//Se dibujan la linea superios, inferior y media
 
-	bl iniciarBarras
+	bl iniciarBarras			//Dibuja las dos barras
 
 	mov x3, 0x201
 	lsl x3, x3, 8
@@ -85,35 +87,131 @@ app:
 	bl PruebaRectangulo
 
 
+
+	bl inicioLoop
+
 appLoop:
 
 
-	bl inputRead
+	bl inputRead				//Lee los botones de control y los guarda en el registro x1
 
-	bl borrarBarras
+	bl borrarBarras				//Dibuja las barras de negro
 
-	bl SiguientePosicionBarra
+	bl SiguientePosicionBarra	//Calcula la siguiente posicion de las barras segun limites y botones.
 
-	bl mostrarBarras
+	bl mostrarBarras			//Dibuja las barras de negro
 
+	cbz x25, timerCount			//Si el timerCount se vuelve 0, se ejecuta ese codigo
+	sub x25, x25, #1			//Si no, se le resta uno
 
-	cbz x25, timerCount
-
-	sub x25, x25, #1
-
-
-	b appLoop
+	b appLoop	//De vuelta al loop
 
 
-	timerCount:
+timerCount:						//Se ejecuta cada TIME_COUNTER veces
 
-	mov x25, TIME_COUNTER
-
+	mov x25, TIME_COUNTER		//Se vuelve a setear en su calor
 	bl MoverPelota
+	bl lineaVertical
+	b appLoop					//Volvemos al loop principal
 
-	b appLoop
+restart:		//Reinicia el juego
 
-/* EJEMPLO
+	bl borrarBarras				//Borro las barras
+
+	b app						//Vuelvo a iniciar
+
+
+
+inicioLoop:		//Espera que algun boton se presione para empezar
+
+	mov x29, x30				//Guardo registro de regreso
+
+	loopControl:
+
+	bl inputRead				//Leo botones y los guardo en x1
+
+	lsl x7, x1, #19
+	and x7, x7, 0xF				//Dejo solo los bits de boton
+
+	cbnz x1, volverAlApp		//Si algun boton se oprime, volver
+
+	b loopControl				//Sino, sigo comprobando
+
+	volverAlApp:
+		br x29
+
+
+
+
+print:		//Esta funcion dibuja un pixel del color y en la posicion que se indica en x4
+	and x10, x4, 0x1FF 			//Extraigo los 9 bits de eje X en x4
+	and x9, x4, 0x3FE00
+	lsr x9, x9, #9				//Extraigo los 9 bits del eje Y en x4
+	mov x11, #512
+	madd x9, x11, x9, x10		//X + (Y * 512)
+	lsr x10, x4, #18
+	and x10, x10, 0xFFFF		//Extraigo los 16 bits de color de x4
+	lsl x9, x9, #1				//Multiplico los bits por 2
+	add x9, x9, x0				//Sumo la direccion base del framebuffer
+	sturh w10, [x9]				//Pinto el bit del color extraifo
+	br x30						//Vuelvo a la direccion de donde link
+
+
+InfLoop:		// Infinite Loop
+	b InfLoop
+	
+	
+	
+	DibujarRectangulo:
+		and x11, x9, 0x1FF
+		lsr x12, x9, 9
+		and x13, x10, 0x1FF
+		lsr x14, x10, 9
+
+
+
+    mov x29, x30            //Guardo la direccion de retorno porque se sobreescribe x30 en print
+    mov x4, BLANCO          //seteo el color de x4
+	  lsl x4, x4, #9
+    orr x4, x4, x12          //Seteo el eje Y con la posicion menos la mitad de la altura
+    lsl x4, x4, #9          //El eje X queda en 0
+    orr x4, x4, x11
+		sub x15, x13, x11
+		sub x16, x14, x12
+		mov x17, 0
+  puntoRectangulo:             //Punto de partida de dibujar eje Y
+	  mov x8, #0              //Contador vertical
+  rectanguloVertical:
+        subs xzr, x8, x16
+        b.eq columnaaTerminado          //Si el contador llego al limite, termina o aumenta el X
+    	bl print
+    	add x8, x8, #1              //Sumo uno al contador
+    	add x4, x4, BARRA_UNIDAD_Y  //Sumo 1 al eje Y
+
+    	b rectanguloVertical             //Recurcion
+
+columnaaTerminado:
+
+    add x17, x17, #1                  //Se termino de pintar una columna
+
+    subs xzr, x15, x17
+    b.eq rectListo                    //Branch de configuracion si se termino la primer barra, sinio aumentamos x
+
+	lsl x18, x16, 9
+    sub x4, x4, x18             //Le resto los 50 lugares que me adelante en el Y de
+
+    add x4, x4, #1                  //Le sumo 1 al eje X
+
+    b puntoRectangulo
+
+rectListo:
+    br x29
+
+
+//-----------FIN CODIGO----------------------------------------------------//
+
+
+/*
 
 	mov x2,512         // Y Size
 	mov x7,x0
@@ -219,65 +317,5 @@ loop0:
 //-----------FIN CODIGO----------------------------------------------------//
 
 
-print:
-	and x10, x4, 0x1FF 			//Extraigo los 9 bits de eje X en x4
-	and x9, x4, 0x3FE00
-	lsr x9, x9, #9				//Extraigo los 9 bits del eje Y en x4
-	mov x11, #512
-	madd x9, x11, x9, x10		//X + (Y * 512)
-	lsr x10, x4, #18
-	and x10, x10, 0xFFFF		//Extraigo los 16 bits de color de x4
-	lsl x9, x9, #1				//Multiplico los bits por 2
-	add x9, x9, x0				//Sumo la direccion base del framebuffer
-	sturh w10, [x9]				//Pinto el bit del color extraifo
-	br x30						//Vuelvo a la direccion de donde link
-
-        // Infinite Loop
-InfLoop:
-	b InfLoop
 
 
-	DibujarRectangulo:
-		and x11, x9, 0x1FF
-		lsr x12, x9, 9
-		and x13, x10, 0x1FF
-		lsr x14, x10, 9
-
-
-
-    mov x29, x30            //Guardo la direccion de retorno porque se sobreescribe x30 en print
-    mov x4, BLANCO          //seteo el color de x4
-	  lsl x4, x4, #9
-    orr x4, x4, x12          //Seteo el eje Y con la posicion menos la mitad de la altura
-    lsl x4, x4, #9          //El eje X queda en 0
-    orr x4, x4, x11
-		sub x15, x13, x11
-		sub x16, x14, x12
-		mov x17, 0
-  puntoRectangulo:             //Punto de partida de dibujar eje Y
-	  mov x8, #0              //Contador vertical
-  rectanguloVertical:
-        subs xzr, x8, x16
-        b.eq columnaaTerminado          //Si el contador llego al limite, termina o aumenta el X
-    	bl print
-    	add x8, x8, #1              //Sumo uno al contador
-    	add x4, x4, BARRA_UNIDAD_Y  //Sumo 1 al eje Y
-
-    	b rectanguloVertical             //Recurcion
-
-columnaaTerminado:
-
-    add x17, x17, #1                  //Se termino de pintar una columna
-
-    subs xzr, x15, x17
-    b.eq rectListo                    //Branch de configuracion si se termino la primer barra, sinio aumentamos x
-
-	lsl x18, x16, 9
-    sub x4, x4, x18             //Le resto los 50 lugares que me adelante en el Y de
-
-    add x4, x4, #1                  //Le sumo 1 al eje X
-
-    b puntoRectangulo
-
-rectListo:
-    br x29

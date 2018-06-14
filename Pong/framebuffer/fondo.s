@@ -16,35 +16,18 @@
     .global PruebaRectangulo
 
 
+    .global lineaVertical
 
 //------FIN DEFINICION DE FUNCIONES-------//
+
+lineaVertical:
+    mov x29, x30
+
+    b vertical
 
 iniciarFondo:   //Dibujo lineas perimetrales y central
 
     mov x29, x30                       //Guardo el registro de retorno, porque se sobreescribe x30
-
-	mov x4, 0xFFFF
-	lsl x4, x4, #2                     //Color en x4 blanco
-    add x4, x4, #1
-    lsl x4, x4, 16                     //Y = 128 en x4
-	add x4, x4, #254                   //x = 256 en x4
-	mov x8, #0                         //Contador x8 = 0
-
-    loopVertical:
-        subs xzr, x8, #256             //Condicion del loop
-        b.eq verticalTeminado
-    	bl print                       //Dibujo el pixel [X,Y]
-    	add x8, x8, #1                 //Sumo 1 al contador
-    	add x4, x4, 0x200              //Sumo 1 al eje Y
-        bl print                       //Dibujo el siguiente pixel
-        add x8, x8, #1                 //Sumo 1 al contador
-    	add x4, x4, 0x200              //Sumo 1 al eje Y
-        add x8, x8, #2                 //sUMO 2 AL CO
-    	add x4, x4, 0x400
-
-    	b loopVertical
-
-verticalTeminado:
 
     mov x4, 0xFFFF
     lsl x4, x4, #2
@@ -75,7 +58,33 @@ horizontalTerminado1:
     b loopHorizontal
 
 horizontalTerminado:
-    br x29
+
+    vertical:
+
+    mov x4, 0xFFFF
+    lsl x4, x4, #2                     //Color en x4 blanco
+    add x4, x4, #1
+    lsl x4, x4, 16                     //Y = 128 en x4
+    add x4, x4, #254                   //x = 256 en x4
+    mov x8, #0                         //Contador x8 = 0
+
+    loopVertical:
+    subs xzr, x8, #256             //Condicion del loop
+    b.eq fondoListo
+    bl print                       //Dibujo el pixel [X,Y]
+    add x8, x8, #1                 //Sumo 1 al contador
+    add x4, x4, 0x200              //Sumo 1 al eje Y
+    bl print                       //Dibujo el siguiente pixel
+    add x8, x8, #1                 //Sumo 1 al contador
+    add x4, x4, 0x200              //Sumo 1 al eje Y
+    add x8, x8, #2                 //sUMO 2 AL CO
+    add x4, x4, 0x400
+
+    b loopVertical
+
+    fondoListo:
+
+        br x29
 
 //-------INICIO DE CODIGO-------//
 
