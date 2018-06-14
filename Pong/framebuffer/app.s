@@ -51,6 +51,7 @@
 		[9:17] = y
 		[18:33] = color
 
+	x25 = Contador general
 	x26 = [0:8] posicion de la barra 1
 	x27 = [0:8] posicion de la barra 2
 
@@ -69,6 +70,8 @@
 //--------------CODIGO----------------------//
 app:
 
+	mov x25, TIME_COUNTER
+
 	bl iniciarFondo
 
 	bl iniciarBarras
@@ -79,7 +82,6 @@ app:
 appLoop:
 
 
-
 	bl inputRead
 
 	bl borrarBarras
@@ -88,13 +90,22 @@ appLoop:
 
 	bl mostrarBarras
 
-	bl MoverPelota
+
+	cbz x25, timerCount
+
+	sub x25, x25, #1
 
 
 	b appLoop
 
 
+	timerCount:
 
+	mov x25, TIME_COUNTER
+
+	bl MoverPelota
+
+	b appLoop
 
 /*
 

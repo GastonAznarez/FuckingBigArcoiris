@@ -369,28 +369,28 @@ tocaizquierda:
     add x13, x13, PELOTA
     add x11, x27, x13
     cmp x4, x11
-    b.le noabajo
+    b.le noabajoi
     mov x2, 0x9
     br x30
-    noabajo:
+    noabajoi:
     sub x11, x11, 10
     cmp x4, x11
-    b.le nodiagoabajo
+    b.le nodiagoabajoi
     mov x2, 8
     br x30
-  nodiagoabajo:
+  nodiagoabajoi:
     sub x11, x11, 15
     cmp x4, x11
-    b.le nomedio
+    b.le nomedioi
     mov x2, 10
     br x30
-    nomedio:
+    nomedioi:
     sub x11, x11, 10
     cmp x4, x11
-    b.le nodiagoarriba
+    b.le nodiagoarribai
     mov x2, 12
     br x30
-    nodiagoarriba:
+    nodiagoarribai:
     mov x2, 13
     br x30
 
