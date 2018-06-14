@@ -77,4 +77,17 @@ horizontalTerminado:
 
 //-------INICIO DE CODIGO-------//
 
+PruebaRectangulo:
+
+mov x29, x30
+
+mov x9, #0
+mov x10, 0x00A
+lsl x10, 9
+orr x10, x10, 0x00A
+bl DibujarRectangulo
+
+br x29
+
+
 //-------FIN DE CODIGO----------//

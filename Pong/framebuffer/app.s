@@ -61,7 +61,9 @@
 
 
 //--------DEFINICION DE FUNCIONES-----------//
-.globl app
+.global app
+
+.global DibujarRectangulo
 
 .global print
 
@@ -79,6 +81,8 @@ app:
 	mov x3, 0x201
 	lsl x3, x3, 8
 	mov x2, 0x7
+
+
 appLoop:
 
 
@@ -107,7 +111,7 @@ appLoop:
 
 	b appLoop
 
-/*
+/* EJEMPLO
 
 	mov x2,512         // Y Size
 	mov x7,x0
@@ -229,3 +233,49 @@ print:
         // Infinite Loop
 InfLoop:
 	b InfLoop
+
+
+	DibujarRectangulo:
+		and x11, x9, 0x1FF
+		lsr x12, x9, 9
+		and x13, x10, 0x1FF
+		lsr x14, x10, 9
+
+
+
+    mov x29, x30            //Guardo la direccion de retorno porque se sobreescribe x30 en print
+    mov x4, BLANCO          //seteo el color de x4
+	  lsl x4, x4, #9
+    orr x4, x4, x12          //Seteo el eje Y con la posicion menos la mitad de la altura
+    lsl x4, x4, #9          //El eje X queda en 0
+    orr x4, x4, x11
+		sub x15, x13, x11
+		sub x16, x14, x12
+  puntoRectangulo:             //Punto de partida de dibujar eje Y
+	  mov x8, #0              //Contador vertical
+
+  rectanguloVertical:
+        subs xzr, x8, x16
+        b.eq rectanguloTeminado          //Si el contador llego al limite, termina o aumenta el X
+    	bl print
+    	add x8, x8, #1              //Sumo uno al contador
+    	add x4, x4, BARRA_UNIDAD_Y  //Sumo 1 al eje Y
+
+    	b rectanguloVertical             //Recurcion
+
+rectanguloTeminado:
+
+    add x13, x13, #1                  //Se termino de pintar una columna
+
+    subs xzr, x13, x15
+    b.eq rectListo                    //Branch de configuracion si se termino la primer barra, sinio aumentamos x
+
+		lsl x17, x16, 9
+    sub x4, x4, x17             //Le resto los 50 lugares que me adelante en el Y de
+
+    add x4, x4, #1                  //Le sumo 1 al eje X
+
+    b puntorectangulo
+
+    rectlisto:
+    br x29

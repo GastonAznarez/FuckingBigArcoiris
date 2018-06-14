@@ -38,109 +38,55 @@
 //-------INICIO DE CODIGO-------//
 
 DibujarPelota:
-    /*mov x3, x2               //copio la posicion de la pelota
-    and x3, x3, 0x3FFFF      //me quedo con los ultimos 18 bits
-    lsl x3, x3, 1            //multiplico por 2
-    add x3, x3, x0           //lo sumo a la direccion del (0,0)
-    mov x6, 0x2062
-    sub x3, x3, x6       //ahora tomo el pixel de arriba de la esquina superior izquierda de la pelota 0x2062 = (512*8+7)*2
+    mov x29, x30            //Guardo la direccion de retorno porque se sobreescribe x30 en print
+    mov x13, #1
+    and x7, x3, 0x1FF
+    mov x6, #14
+    lsr x6, x6, #1
+    sub x7, x7, x6          //Le resto a la posicion de la barra la mitad de la altura
+    lsr x8, x3, #9
+    sub x8, x8, x6
+    and x8, x8, 0x1FF
 
-    mov x5, xzr
-    mov x29, x30
-    sub x3, x3, #6
-    sub x3, x3, 0xC00
-    b pintofila
-nuevafila:
+    mov x4, BLANCO          //seteo el color de x4
+	  lsl x4, x4, #9
+    orr x4, x4, x8          //Seteo el eje Y con la posicion menos la mitad de la altura
+    lsl x4, x4, #9          //El eje X queda en 0
+    orr x4, x4, x7
 
-    subs xzr, x5, #14
-    b.eq alveintinueve      //si ya pinte las 15 filas ya termino
-    /*mov x6, 15              //contador para pintar cada fila de la pelota
-    add x3, x3, 0x200
-    sub x3, x3, 14
-pintofila:
-    mov x4, BLANCO
-    lsl x4, x4, #18
-    orr x4, x4, x3
-    bl print
-    add x5, x5, 1
-    add x3, x3, 1
-    subs xzr, x5, #14
-    b.eq nuevafila
-    b pintofila*/
+  puntoPelota:             //Punto de partida de dibujar eje Y
+	  mov x8, #0              //Contador vertical
 
-        mov x29, x30            //Guardo la direccion de retorno porque se sobreescribe x30 en print
-        mov x13, #1
+  pelotaVertical:
+        subs xzr, x8, #14
+        b.eq pelotaTeminado          //Si el contador llego al limite, termina o aumenta el X
+    	bl print
+    	add x8, x8, #1              //Sumo uno al contador
+    	add x4, x4, BARRA_UNIDAD_Y  //Sumo 1 al eje Y
 
-        and x7, x3, 0x1FF
-        mov x6, #14
-        lsr x6, x6, #1
-        sub x7, x7, x6          //Le resto a la posicion de la barra la mitad de la altura
-        lsr x8, x3, #9
-        sub x8, x8, x6
-        and x8, x8, 0x1FF
+    	b pelotaVertical             //Recurcion
+
+pelotaTeminado:
+
+    add x13, x13, #1                  //Se termino de pintar una columna
+
+    subs xzr, x13, #14
+    b.eq pelotaLista                     //Branch de configuracion si se termino la primer barra, sinio aumentamos x
 
 
+    mov x10, 0x1C00
+    sub x4, x4, x10                 //Le resto los 50 lugares que me adelante en el Y de
 
-        mov x4, BLANCO          //seteo el color de x4
-    	lsl x4, x4, #9
-        orr x4, x4, x8          //Seteo el eje Y con la posicion menos la mitad de la altura
-        lsl x4, x4, #9          //El eje X queda en 0
-        orr x4, x4, x7
+    add x4, x4, #1                  //Le sumo 1 al eje X
 
-        puntoPelota:             //Punto de partida de dibujar eje Y
+    b puntoPelota
 
-    	mov x8, #0              //Contador vertical
-
-        pelotaVertical:
-            subs xzr, x8, #14
-            b.eq pelotaTeminado          //Si el contador llego al limite, termina o aumenta el X
-        	bl print
-        	add x8, x8, #1              //Sumo uno al contador
-        	add x4, x4, BARRA_UNIDAD_Y  //Sumo 1 al eje Y
-
-        	b pelotaVertical             //Recurcion
-
-    pelotaTeminado:
-
-        add x13, x13, #1                  //Se termino de pintar una columna
-
-        subs xzr, x13, #14
-        b.eq pelotaLista                     //Branch de configuracion si se termino la primer barra, sinio aumentamos x
-
-
-        mov x10, 0x1C00
-        sub x4, x4, x10                 //Le resto los 50 lugares que me adelante en el Y de
-
-        add x4, x4, #1                  //Le sumo 1 al eje X
-
-        b puntoPelota
-
-        pelotaLista:
-        br x29
+    pelotaLista:
+    br x29
 
 
 
-/*BorrarPelota:
-//mismo codigo anterior pero con el color negro xd
-mov x3, x2               //copio la posicion de la pelota
-and x3, x3, 0x3FFFF      //me quedo con los ultimos 18 bits
-lsl x3, x3, 1            //multiplico por 2
-add x3, x3, x0           //lo sumo a la direccion del (0,0)
-mov x6, 0x200e
-sub x3, x3, x6      //ahora tomo el pixel de arriba de la esquina superior izquierda de la pelota 0x200e = (512*8+7)*2
-mov x5, 16
-nuevafilab:
-    sub x5, x5, 1
-    cbz x5, alTreinta       //si ya borre las 15 filas ya termino
-    mov x4, 15              //contador para pintar cada fila de la pelota
-    add x3, x3, 996         //sumo (512-14)*2 para ir al primer pixel de la siguiente fila
-pintofilab:
-    mov x3, 0xfff         //lo pinto de negro
-    sub x4, x4, 1
-    cbz x4, nuevafilab      //si ya borre toda la fila voy a la proxima
-    add x3, x3, 2           //sino voy al siguiente pixel
-    b pintofilab
-    */
+
 
 BorrarPelota:
     mov x29, x30            //Guardo la direccion de retorno porque se sobreescribe x30 en print
@@ -193,55 +139,6 @@ pelotaTeminadob:
     pelotaListab:
     br x29
 
-CambiarDireccionPelota:
-    and x3 , x2, 0xF8000000 //tomo los bits 27-31 de x2
-    lsr x3, x3, 26              //shifteo a la derecha para que me queden chicos los numeros
-    cbz x3, alTreinta       //si es 0 no toca nada, no cambia la direccion
-    cmp x3, 11              //comparo todos los casos
-    b.eq tocapared
-    cmp x3, 12
-    b.eq tocapared
-    cmp x3, 9
-    b.eq pabajo
-    cmp x3, 5
-    b.eq pabajo
-    cmp x3, 10
-    b.eq diagoabajo
-    cmp x3, 4
-    b.eq diagoabajo
-    cmp x3, 8
-    b.eq almedio
-    cmp x3, 3
-    b.eq almedio
-    cmp x3, 7
-    b.eq diagoarriba
-    cmp x3, 2
-    b.eq diagoarriba
-    cmp x3, 6
-    b.eq parriba
-    cmp x3, 1
-    b.eq parriba
-diagoabajo:                     //ver especificacion registro direccion
-    mov x4,0
-    b cambiodireccion
-diagoarriba:
-    mov x4, 0x4
-    b cambiodireccion
-parriba:
-    mov x4,0x5
-    b cambiodireccion
-pabajo:
-    mov x4,0x1
-    b cambiodireccion
-almedio:
-    mov x4,0x2
-    b cambiodireccion
-cambiodireccion:
-      bfi x2, x4, 18, 3         //escribo la direccion en mi registro
-      eor x2, x2, 0x100000      //niego la direccion izquierda-derecha porque golpeo una barra
-      br x30
-tocapared:
-    br x30
 
 
 MoverPelota:
@@ -308,11 +205,10 @@ sigo:
     b.ge tocaderecha
     br x30
 
-    tocalado:
+tocalado:
     mov x11, 0x4
     eor x2, x2, x11
     b sigo
-
 
 tocaderecha:
     mov x13, BARRA_ALTO + PELOTA
@@ -330,26 +226,26 @@ tocaderecha:
     b.le noabajo
     mov x2, 0x1
     br x30
-    noabajo:
+noabajo:
     sub x11, x11, 10
     cmp x4, x11
     b.le nodiagoabajo
-    mov x2, 0
+    mov x2, 0x0
     br x30
-  nodiagoabajo:
+nodiagoabajo:
     sub x11, x11, 15
     cmp x4, x11
     b.le nomedio
-    mov x2, 2
+    mov x2, 0x2
     br x30
-    nomedio:
+nomedio:
     sub x11, x11, 10
     cmp x4, x11
     b.le nodiagoarriba
-    mov x2, 4
+    mov x2, 0x4
     br x30
-    nodiagoarriba:
-    mov x2, 5
+nodiagoarriba:
+    mov x2, 0x5
     br x30
 
 
@@ -358,94 +254,57 @@ tocaderecha:
 
 
 tocaizquierda:
-mov x13, BARRA_ALTO + PELOTA
-lsr x13, x13, 1
-add x12, x13, x27
-cmp x4, x12
-b.ge punto2
-sub x12, x27, x13
-cmp x4, x12
-b.le punto2
+    mov x13, BARRA_ALTO + PELOTA
+    lsr x13, x13, 1
+    add x12, x13, x27
+    cmp x4, x12
+    b.ge punto2
+    sub x12, x27, x13
+    cmp x4, x12
+    b.le punto2
 
-mov x13, 21
-add x11, x27, x13
-cmp x4, x11
-b.le noabajoi
-mov x2, 0x1
-br x30
+    mov x13, 21
+    add x11, x27, x13
+    cmp x4, x11
+    b.le noabajoi
+    mov x2, 0x9
+    br x30
 noabajoi:
-sub x11, x11, 10
-cmp x4, x11
-b.le nodiagoabajoi
-mov x2, 0
-br x30
+    sub x11, x11, 10
+    cmp x4, x11
+    b.le nodiagoabajoi
+    mov x2, 0x8
+    br x30
 nodiagoabajoi:
-sub x11, x11, 15
-cmp x4, x11
-b.le nomedioi
-mov x2, 2
-br x30
+    sub x11, x11, 15
+    cmp x4, x11
+    b.le nomedioi
+    mov x2, 0xa
+    br x30
 nomedioi:
-sub x11, x11, 10
-cmp x4, x11
-b.le nodiagoarribai
-mov x2, 4
-br x30
+    sub x11, x11, 10
+    cmp x4, x11
+    b.le nodiagoarribai
+    mov x2, 0xc
+    br x30
 nodiagoarribai:
-mov x2, 5
-br x30
-
-
-
-
-
-
-
-
-
-    punto:
-    b app
-
-    punto2:
-    b app
-
-    /*
-    mov x7, 511
-    sub x7, x7, x6
-    cmp x5, x7
-    b.eq tocabarra*/
-
-
-
-    tocabarra:
-
-    mov x11, 0x200000
-    eor x3, x3, x11
+    mov x2, 0xd
     br x30
 
+punto:
+  b app
 
-
-chocapared:
-    eor x2, x2, 0x80000          //niego la direccion arriba-abajo
-
-
-
-
+punto2:
+  b app
 
 InicioPelota:
-    and x3,x2,0x3c00000         //guardo el puntaje
-    mov x6, 0xa01
+    mov x3, 0x201
+    mov x2, 0x2
     lsl x6, x6, 8
-    mov x2, x6             //posicion al medio y direccion horizontal
+    mov x2, x6                  //posicion al medio y direccion horizontal
     add x2, x2, x3              //le agrego el puntaje
     br x30
-alTreinta:
-    br x30
 
-alveintinueve:
-    br x29
-
-PuntoPelota:
 
 
 //-------FIN DE CODIGO----------//
