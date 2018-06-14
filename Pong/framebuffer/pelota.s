@@ -315,7 +315,7 @@ sigo:
 
 
 tocaderecha:
-    mov x13, BARRA_ALTO + PELOTA
+    mov x13, BARRA_ALTO
     lsr x13, x13, 1
     add x12, x13, x26
     cmp x4, x12
@@ -323,25 +323,26 @@ tocaderecha:
     sub x12, x26, x13
     cmp x4, x12
     b.le punto
+    add x13, x13, PELOTA
     add x11, x26, x13
     cmp x4, x11
     b.le noabajo
     mov x2, 0x1
     br x30
     noabajo:
-    sub x11, 10
+    sub x11, x11, 10
     cmp x4, x11
     b.le nodiagoabajo
     mov x2, 0
     br x30
   nodiagoabajo:
-    sub x11, 15
+    sub x11, x11, 15
     cmp x4, x11
     b.le nomedio
     mov x2, 2
     br x30
     nomedio:
-    sub x11, 10
+    sub x11, x11, 10
     cmp x4, x11
     b.le nodiagoarriba
     mov x2, 4
@@ -364,8 +365,33 @@ tocaizquierda:
     sub x12, x27, x13
     cmp x4, x12
     b.le punto2
-    mov x11, 0x8
-    eor x2, x2, x11
+
+    add x13, x13, PELOTA
+    add x11, x27, x13
+    cmp x4, x11
+    b.le noabajo
+    mov x2, 0x9
+    br x30
+    noabajo:
+    sub x11, x11, 10
+    cmp x4, x11
+    b.le nodiagoabajo
+    mov x2, 8
+    br x30
+  nodiagoabajo:
+    sub x11, x11, 15
+    cmp x4, x11
+    b.le nomedio
+    mov x2, 10
+    br x30
+    nomedio:
+    sub x11, x11, 10
+    cmp x4, x11
+    b.le nodiagoarriba
+    mov x2, 12
+    br x30
+    nodiagoarriba:
+    mov x2, 13
     br x30
 
 
