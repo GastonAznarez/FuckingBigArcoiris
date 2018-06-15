@@ -118,18 +118,19 @@ borrarNumeros:
 dibujarCero:
     mov x28, x30
 
-    mov x19, 0xFFFF
+    mov x19, BLANCO
     cbnz x5, playerUnoCero
 
-    mov x23, #165
+
+    mov x23, #165 // Si se le suma a player 2
 
     b dibujandoCero
 
     playerUnoCero:
 
-    mov x23, #0
+    mov x23, #0  // Si se le suma a player 1
 
-    dibujandoCero:
+    dibujandoCero:     //Lado superior
 
     mov x9, 30          // Y del punto inicial
     lsl x9, x9, 9       // Corremos 9 Lugares
@@ -140,6 +141,8 @@ dibujarCero:
     add x21,x23, 200    // X del punto final
     orr x10, x10, x21   // Fusionamos X,Y punto final
     bl DibujarRectangulo // Volvemos
+
+    //Se repite para cada lado del numero
 
     mov x9, 45         //Lado izquierdo
     lsl x9, x9, 9
@@ -176,22 +179,22 @@ dibujarCero:
 
 
 dibujarUno:
-    mov x19, 0xFFFF
+    mov x19, BLANCO
     mov x28, x30
 
     cbnz x5, playerUnoUno
 
-    mov x23, #165
+    mov x23, #165  // Si se le suma a player 2
 
     b dibujandoUno
 
     playerUnoUno:
 
-    mov x23, #0
+    mov x23, #0    // Si se le suma a player 1
 
     dibujandoUno:
 
-    mov x9, 30         //Lado izquierdo
+    mov x9, 30         //Unica barra del 1
     lsl x9, x9, 9
     add x22,x23, 150
     orr x9, x9, x22
@@ -201,36 +204,28 @@ dibujarUno:
     orr x10, x10, x21
     bl DibujarRectangulo
 
-    /*mov x9, 30
-    lsl x9, x9, 9
-    mov x22, 140
-    orr x9, x9, x22
-    mov x10, 98
-    lsl x10, x10, 9
-    mov x21, 155
-    orr x10, x10, x21
-    bl DibujarRectangulo*/
+
     br x28
 
 
 dibujarDos:
-    mov x19, 0xFFFF
+    mov x19, BLANCO
     mov x28, x30
 
 
     cbnz x5, playerUnoDos
 
-    mov x23, #165
+    mov x23, #165   // Si se le suma a player 2
 
     b dibujandoDos
 
     playerUnoDos:
 
-    mov x23, #0
+    mov x23, #0     // Si se le suma a player 1
 
     dibujandoDos:
 
-    mov x9, 30
+    mov x9, 30 //Lado superior
     lsl x9, x9, 9
     add x22,x23, 150
     orr x9, x9, x22
@@ -242,7 +237,7 @@ dibujarDos:
 
 
 
-    mov x9, 45
+    mov x9, 45  //lado derecho
     lsl x9, x9, 9
     add x22,x23, 185
     orr x9, x9, x22
@@ -252,7 +247,7 @@ dibujarDos:
     orr x10, x10, x21
     bl DibujarRectangulo
 
-    mov x9, 56
+    mov x9, 56  //Lado medio
     lsl x9, x9, 9
     add x22,x23, 150
     orr x9, x9, x22
@@ -262,7 +257,7 @@ dibujarDos:
     orr x10, x10, x21
     bl DibujarRectangulo
 
-    mov x9, 71
+    mov x9, 71   // Lado izquierdo
     lsl x9, x9, 9
     add x22,x23, 150
     orr x9, x9, x22
@@ -272,7 +267,7 @@ dibujarDos:
     orr x10, x10, x21
     bl DibujarRectangulo
 
-    mov x9, 83
+    mov x9, 83  // Lado inferior
     lsl x9, x9, 9
     add x22,x23, 150
     orr x9, x9, x22
@@ -285,66 +280,6 @@ dibujarDos:
 
 
 
-
-/*
-//3
-
-mov x23, 165
-
-mov x9, 30
-lsl x9, x9, 9
-add x22,x23, 150
-orr x9, x9, x22
-mov x10, 45
-lsl x10, x10, 9
-add x21,x23, 200
-orr x10, x10, x21
-bl DibujarRectangulo
-
-
-
-mov x9, 45
-lsl x9, x9, 9
-add x22,x23, 185
-orr x9, x9, x22
-mov x10, 56
-lsl x10, x10, 9
-add x21,x23, 200
-orr x10, x10, x21
-bl DibujarRectangulo
-
-mov x9, 56
-lsl x9, x9, 9
-add x22,x23, 150
-orr x9, x9, x22
-mov x10, 71
-lsl x10, x10, 9
-add x21,x23, 200
-orr x10, x10, x21
-bl DibujarRectangulo
-
-mov x9, 71
-lsl x9, x9, 9
-add x22,x23, 185
-orr x9, x9, x22
-mov x10, 83
-lsl x10, x10, 9
-add x21,x23, 200
-orr x10, x10, x21
-bl DibujarRectangulo
-
-mov x9, 83
-lsl x9, x9, 9
-add x22,x23, 150
-orr x9, x9, x22
-mov x10, 98
-lsl x10, x10, 9
-add x21,x23, 200
-orr x10, x10, x21
-bl DibujarRectangulo
-br x28
-
-*/
 
 
 

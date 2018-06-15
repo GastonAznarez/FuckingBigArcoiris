@@ -76,9 +76,9 @@
 //--------------CODIGO----------------------//
 app:
 
-	bl borrarBarras
+	bl borrarBarras				//Se borran las barras para prevenir fantasmas cuando se reinicia el juego
 
-	bl borrarNumeros
+	bl borrarNumeros			//Por la misma razon se borran los numeros
 
 	mov x25, TIME_COUNTER		//Contador para ejecutar el codigo en timerCount
 
@@ -88,19 +88,17 @@ app:
 
 	mov x3, 0x201
 	lsl x3, x3, 8
-	mov x2, 0x7
+	mov x2, 0x7					//Se inicia la posicion y direccion de la pelota
 
 	mov x5, #1
 	bl dibujarCero
 
 	mov x5, #0
-	bl dibujarCero
+	bl dibujarCero				//Se dibujan los dos ceros del puntaje
 
-	mov x24, #0
+	mov x24, #0					//El puntaje se setea a 0 en ambos jugadores
 
-	//bl comprobarPuntaje
-
-	bl inicioLoop
+	bl inicioLoop				//Loop que espera a que se oprima un boton para empezar
 
 appLoop:
 
@@ -133,7 +131,7 @@ restart:		//Reinicia el juego
 
 	mov x3, 0x201
 	lsl x3, x3, 8
-	mov x2, 0x7
+	mov x2, 0x7					//Se setea la posicion y direccion de la pelota
 
 	b appLoop						//Vuelvo a iniciar
 
@@ -185,31 +183,31 @@ DibujarRectangulo:										//DIBUJA UN RECTANGULO QUE VA DEL PUNTO GUARDADO EN 
 
     mov x29, x30            		//Guardo la direccion de retorno porque se sobreescribe x30 en print
     mov x4, x19          				//seteo el color de x4
-		lsl x4, x4, #9
+	lsl x4, x4, #9
     orr x4, x4, x12          		//Seteo el inicio en y	(el y del punto 1)
     lsl x4, x4, #9
     orr x4, x4, x11							//Seteo el inicio en x (el x del punto 1)
-		sub x15, x13, x11
-		sub x16, x14, x12
-		mov x17, 0									//contador horizontal
+	sub x15, x13, x11
+	sub x16, x14, x12
+	mov x17, 0									//contador horizontal
   puntoRectangulo:
 	  mov x8, #0              		//Contador vertical
 
 	rectanguloVertical:
-      subs xzr, x8, x16					//Veo si termine la columna
-      b.eq columnaaTerminado    //Si el contador llego al limite, termina o aumenta el X
-    	bl print
-    	add x8, x8, #1              //Sumo uno al contador
-    	add x4, x4, BARRA_UNIDAD_Y  //Sumo 1 al eje Y
+      	subs xzr, x8, x16					//Veo si termine la columna
+      	b.eq columnaaTerminado    //Si el contador llego al limite, termina o aumenta el X
+		bl print
+		add x8, x8, #1              //Sumo uno al contador
+		add x4, x4, BARRA_UNIDAD_Y  //Sumo 1 al eje Y
 
-    	b rectanguloVertical             //Recursion
+		b rectanguloVertical             //Recursion
 
 columnaaTerminado:
 
     add x17, x17, #1               //Se termino de pintar una columna
     subs xzr, x15, x17
     b.eq rectListo                 //Branch de configuracion si se termino la primer barra, sinio aumentamos x
-		lsl x18, x16, 9
+	lsl x18, x16, 9
     sub x4, x4, x18             	 //Le resto los 50 lugares que me adelante en el Y de
     add x4, x4, #1                 //Le sumo 1 al eje X
 
@@ -220,7 +218,9 @@ rectListo:
 
 comprobarPuntaje:
 
-	bl borrarNumeros
+	//Aca se comprueba el puntaje de cada jugador y se dibuja el numero correspondiente
+
+	bl borrarNumeros		//Borro numeros anteriores
 
 
 	and x7, x24, 0x3
@@ -283,104 +283,5 @@ comprobarPuntaje:
 	b restart
 
 
-
-
-
-
-//-----------FIN CODIGO----------------------------------------------------//
-
-
-/* ----------EJEMPLOS DE PRINT Y GPIO---------------------
-
-	mov x2,512         // Y Size
-	mov x7,x0
-	mov w6, 0xFFFF
-	loop4:
-	mov x1,512         // X Size
-	loop5:
-	sturh w6,[x7]	   // Set color of pixel N
-	add x7,x7,2	   // Next pixel
-	sub x1,x1,1	   // decrement X counter
-	cbnz x1,loop5	   // If not end row jump
-	sub x2,x2,1	   // Decrement Y counter
-	cbnz x2,loop4	   // if not last row, jump
-
-	//Hasta aca solo pinte todo de blanco
-
-	mov x4, 0xF800
-	lsl x4, x4, #1
-	add x4, x4, #1
-	lsl x4, x4, 17
-	mov x8, #0
-	//Dejo a x4 con color rojo, y = 254, x = 0
-	loopn: //pinta todos los x, solo printea y suma 1 a la parte del x en x4 512 veces
-	bl print
-	subs xzr, x8, #511
-	b.eq horizontal
-	add x8, x8, #1
-	add x4, x4, #1
-	b loopn
-
-horizontal:
-	mov x4, 0x1F
-	lsl x4, x4, #18
-	add x4, x4, #254
-	mov x8, #0
-	//Dejo a x4 con color azul, y = 0, x = 254
-
-	loopr: //pinta todos los y, solo printea y suma 1 a la parte del x en x4 512 veces
-		bl print
-		subs xzr, x8, #511
-		b.eq InfLoop
-		add x8, x8, #1
-		add x4, x4, 0x200
-		b loopr
-
-	// X0 contiene la direccion base del framebuffer
-
-	mov w3, 0x0 //Dejo a x3  como color negro
-	mov w4, 0xFFFF //blanco
-	mov w5, 0xF800    // 0xF800 = RED
-	mov w13, 0x1F //BLUE
-	mov w14, 0x7E0
-
-
-	bl inputRead
-
-	and x7, x1, BTN_1		//Obtengo solo el bit del BTN_1
-	mov w6, w4
-	cbnz x7, change			//Si el bit no es cero (boton pulsado) salto
-
-	and x7, x1, BTN_2
-	mov w6, w13
-	cbnz x7, change
-
-	and x7, x1, BTN_3
-	mov w6, w5
-	cbnz x7, change
-
-	and x7, x1, BTN_4
-	mov w6, w14
-	cbnz x7, change
-
-	mov w6, w3
-
-	b change
-
-change:
-	mov x2,512         // Y Size
-	mov x7,x0
-loop1:
-	mov x1,512         // X Size
-loop0:
-	sturh w6,[x7]	   // Set color of pixel N
-	add x7,x7,2	   // Next pixel
-	sub x1,x1,1	   // decrement X counter
-	cbnz x1,loop0	   // If not end row jump
-	sub x2,x2,1	   // Decrement Y counter
-	cbnz x2,loop1	   // if not last row, jump
-
-	b app
-*/
 
 //-----------FIN CODIGO----------------------------------------------------//
