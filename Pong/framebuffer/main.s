@@ -41,15 +41,15 @@
 	.equ PELOTA_MITAD,		   0x6
 	.equ PELOTA,			   0x15
 
-	.equ FIN_TABLERO_ARRIBA,   0x81
-	.equ FIN_TABLERO_ABAJO,    0x181
+	.equ FIN_TABLERO_ARRIBA,   0x7A
+	.equ FIN_TABLERO_ABAJO,    0x18F
 
 	.equ EJE_MAX,			   0x1FF
 
 	.equ BLANCO,			   0xFFFF
 	.equ NEGRO,				   0x0000
 
-	.equ TIME_COUNTER,		   0x15
+	.equ TIME_COUNTER,		   0x2
 
 // Return CPU ID (0..3) Of The CPU Executed On
 	mrs x0,MPIDR_EL1 // X0 = Multiprocessor Affinity Register (MPIDR)

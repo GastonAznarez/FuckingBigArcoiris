@@ -18,6 +18,8 @@
 
     .global lineaVertical
 
+    .global borrarNumeros
+
 //------FIN DEFINICION DE FUNCIONES-------//
 
 lineaVertical:
@@ -30,9 +32,11 @@ iniciarFondo:   //Dibujo lineas perimetrales y central
     mov x29, x30                       //Guardo el registro de retorno, porque se sobreescribe x30
 
     mov x4, 0xFFFF
-    lsl x4, x4, #2
-    add x4, x4, #1
-    lsl x4, x4, #16
+    lsl x4, x4, #9
+    add x4, x4, #121
+    //lsl x4, x4, #2
+    //add x4, x4, #1
+    lsl x4, x4, #9
     mov x8, #0
     mov x5, #1                          //Contdor de lineas
 
@@ -51,7 +55,7 @@ horizontalTerminado1:
     sub x5, x5, #1
     mov x4, 0xFFFF
     lsl x4, x4, #9
-    add x4, x4, 0x181
+    add x4, x4, 0x190
     lsl x4, x4, #9
     mov x8, #0
 
@@ -69,7 +73,7 @@ horizontalTerminado:
     mov x8, #0                         //Contador x8 = 0
 
     loopVertical:
-    subs xzr, x8, #256             //Condicion del loop
+    subs xzr, x8, #272             //Condicion del loop
     b.eq fondoListo
     bl print                       //Dibujo el pixel [X,Y]
     add x8, x8, #1                 //Sumo 1 al contador
@@ -82,28 +86,210 @@ horizontalTerminado:
 
     b loopVertical
 
+
+
     fondoListo:
 
         br x29
 
 //-------INICIO DE CODIGO-------//
 
-PruebaRectangulo:
+borrarNumeros:
 
-mov x28, x30
-//1
-mov x9, 30
-lsl x9, x9, 9
-mov x22, 140
-orr x9, x9, x22
-mov x10, 98
-lsl x10, x10, 9
-mov x21, 155
-orr x10, x10, x21
-bl DibujarRectangulo
+    mov x28, x30
+    mov x19, 0x0
 
-//2
-mov x23, 162
+    mov x23, #0
+
+    mov x9, 30
+    lsl x9, x9, 9
+    mov x22, 140
+    orr x9, x9, x22
+    mov x10, 98
+    lsl x10, x10, 9
+    mov x21, 450
+    orr x10, x10, x21
+    bl DibujarRectangulo
+    br x28
+
+
+
+
+dibujarCero:
+    mov x28, x30
+
+    mov x19, 0xFFFF
+    cbnz x5, playerUnoCero
+
+    mov x23, #165
+
+    b dibujandoCero
+
+    playerUnoCero:
+
+    mov x23, #0
+
+    dibujandoCero:
+
+    mov x9, 30          // Y del punto inicial
+    lsl x9, x9, 9       // Corremos 9 Lugares
+    add x22,x23, 150    // X del punto inicial
+    orr x9, x9, x22     // Fucionamos X,Y punto inicial
+    mov x10, 45         // Y punto final
+    lsl x10, x10, 9     // Corremos 9 lugares
+    add x21,x23, 200    // X del punto final
+    orr x10, x10, x21   // Fusionamos X,Y punto final
+    bl DibujarRectangulo // Volvemos
+
+    mov x9, 45         //Lado izquierdo
+    lsl x9, x9, 9
+    add x22,x23, 150
+    orr x9, x9, x22
+    mov x10, 83
+    lsl x10, x10, 9
+    add x21,x23, 165
+    orr x10, x10, x21
+    bl DibujarRectangulo
+
+
+    mov x9, 45         //lado derecho
+    lsl x9, x9, 9
+    add x22,x23, 185
+    orr x9, x9, x22
+    mov x10, 83
+    lsl x10, x10, 9
+    add x21,x23, 200
+    orr x10, x10, x21
+    bl DibujarRectangulo
+
+
+    mov x9, 83         //Abajo
+    lsl x9, x9, 9
+    add x22,x23, 150
+    orr x9, x9, x22
+    mov x10, 98
+    lsl x10, x10, 9
+    add x21,x23, 200
+    orr x10, x10, x21
+    bl DibujarRectangulo
+    br x28
+
+
+dibujarUno:
+    mov x19, 0xFFFF
+    mov x28, x30
+
+    cbnz x5, playerUnoUno
+
+    mov x23, #165
+
+    b dibujandoUno
+
+    playerUnoUno:
+
+    mov x23, #0
+
+    dibujandoUno:
+
+    mov x9, 30         //Lado izquierdo
+    lsl x9, x9, 9
+    add x22,x23, 150
+    orr x9, x9, x22
+    mov x10, 98
+    lsl x10, x10, 9
+    add x21,x23, 165
+    orr x10, x10, x21
+    bl DibujarRectangulo
+
+    /*mov x9, 30
+    lsl x9, x9, 9
+    mov x22, 140
+    orr x9, x9, x22
+    mov x10, 98
+    lsl x10, x10, 9
+    mov x21, 155
+    orr x10, x10, x21
+    bl DibujarRectangulo*/
+    br x28
+
+
+dibujarDos:
+    mov x19, 0xFFFF
+    mov x28, x30
+
+
+    cbnz x5, playerUnoDos
+
+    mov x23, #165
+
+    b dibujandoDos
+
+    playerUnoDos:
+
+    mov x23, #0
+
+    dibujandoDos:
+
+    mov x9, 30
+    lsl x9, x9, 9
+    add x22,x23, 150
+    orr x9, x9, x22
+    mov x10, 45
+    lsl x10, x10, 9
+    add x21,x23, 200
+    orr x10, x10, x21
+    bl DibujarRectangulo
+
+
+
+    mov x9, 45
+    lsl x9, x9, 9
+    add x22,x23, 185
+    orr x9, x9, x22
+    mov x10, 56
+    lsl x10, x10, 9
+    add x21,x23, 200
+    orr x10, x10, x21
+    bl DibujarRectangulo
+
+    mov x9, 56
+    lsl x9, x9, 9
+    add x22,x23, 150
+    orr x9, x9, x22
+    mov x10, 71
+    lsl x10, x10, 9
+    add x21,x23, 200
+    orr x10, x10, x21
+    bl DibujarRectangulo
+
+    mov x9, 71
+    lsl x9, x9, 9
+    add x22,x23, 150
+    orr x9, x9, x22
+    mov x10, 83
+    lsl x10, x10, 9
+    add x21,x23, 165
+    orr x10, x10, x21
+    bl DibujarRectangulo
+
+    mov x9, 83
+    lsl x9, x9, 9
+    add x22,x23, 150
+    orr x9, x9, x22
+    mov x10, 98
+    lsl x10, x10, 9
+    add x21,x23, 200
+    orr x10, x10, x21
+    bl DibujarRectangulo
+    br x28
+
+
+
+
+/*
+//3
+
+mov x23, 165
 
 mov x9, 30
 lsl x9, x9, 9
@@ -139,11 +325,11 @@ bl DibujarRectangulo
 
 mov x9, 71
 lsl x9, x9, 9
-add x22,x23, 150
+add x22,x23, 185
 orr x9, x9, x22
 mov x10, 83
 lsl x10, x10, 9
-add x21,x23, 165
+add x21,x23, 200
 orr x10, x10, x21
 bl DibujarRectangulo
 
@@ -157,6 +343,9 @@ add x21,x23, 200
 orr x10, x10, x21
 bl DibujarRectangulo
 br x28
+
+*/
+
 
 
 

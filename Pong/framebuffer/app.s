@@ -69,10 +69,16 @@
 
 .global restart
 
+.global comprobarPuntaje
+
 //--------FIN DEFINICION DE FUNCIONES-------//
 
 //--------------CODIGO----------------------//
 app:
+
+	bl borrarBarras
+
+	bl borrarNumeros
 
 	mov x25, TIME_COUNTER		//Contador para ejecutar el codigo en timerCount
 
@@ -84,9 +90,15 @@ app:
 	lsl x3, x3, 8
 	mov x2, 0x7
 
-	bl PruebaRectangulo
+	mov x5, #1
+	bl dibujarCero
 
+	mov x5, #0
+	bl dibujarCero
 
+	mov x24, #0
+
+	//bl comprobarPuntaje
 
 	bl inicioLoop
 
@@ -116,9 +128,14 @@ timerCount:						//Se ejecuta cada TIME_COUNTER veces
 
 restart:		//Reinicia el juego
 
+
 	bl borrarBarras				//Borro las barras
 
-	b app						//Vuelvo a iniciar
+	mov x3, 0x201
+	lsl x3, x3, 8
+	mov x2, 0x7
+
+	b appLoop						//Vuelvo a iniciar
 
 
 
@@ -141,8 +158,6 @@ inicioLoop:		//Espera que algun boton se presione para empezar
 		br x29
 
 
-
-
 print:		//Esta funcion dibuja un pixel del color y en la posicion que se indica en x4
 	and x10, x4, 0x1FF 			//Extraigo los 9 bits de eje X en x4
 	and x9, x4, 0x3FE00
@@ -159,26 +174,25 @@ print:		//Esta funcion dibuja un pixel del color y en la posicion que se indica 
 
 InfLoop:		// Infinite Loop
 	b InfLoop
-	
-	
-	
-	DibujarRectangulo:
-		and x11, x9, 0x1FF
-		lsr x12, x9, 9
-		and x13, x10, 0x1FF
-		lsr x14, x10, 9
 
+
+
+DibujarRectangulo:
+	and x11, x9, 0x1FF
+	lsr x12, x9, 9
+	and x13, x10, 0x1FF
+	lsr x14, x10, 9
 
 
     mov x29, x30            //Guardo la direccion de retorno porque se sobreescribe x30 en print
-    mov x4, BLANCO          //seteo el color de x4
-	  lsl x4, x4, #9
+    mov x4, x19          //seteo el color de x4
+	lsl x4, x4, #9
     orr x4, x4, x12          //Seteo el eje Y con la posicion menos la mitad de la altura
     lsl x4, x4, #9          //El eje X queda en 0
     orr x4, x4, x11
-		sub x15, x13, x11
-		sub x16, x14, x12
-		mov x17, 0
+	sub x15, x13, x11
+	sub x16, x14, x12
+	mov x17, 0
   puntoRectangulo:             //Punto de partida de dibujar eje Y
 	  mov x8, #0              //Contador vertical
   rectanguloVertical:
@@ -208,10 +222,79 @@ rectListo:
     br x29
 
 
+comprobarPuntaje:
+
+	bl borrarNumeros
+
+
+	and x7, x24, 0x3
+
+	mov x5, #1
+
+	cbnz x7, noDibujarCero
+	bl dibujarCero
+	b noDibujarDos
+
+	noDibujarCero:
+
+	subs xzr, x7, #1
+	b.ne noDibujarUno
+
+	bl dibujarUno
+	b noDibujarDos
+
+	noDibujarUno:
+
+	subs xzr, x7, #2
+	b.ne noDibujarDos
+
+	bl dibujarDos
+
+	noDibujarDos:
+
+	subs xzr, x7, #3
+	b.eq app
+
+	mov x5, #0
+
+	lsr x7, x24, #2
+	and x7, x7, 0x3
+
+	cbnz x7, noDibujarCero2
+	bl dibujarCero
+	b noDibujarDos2
+
+	noDibujarCero2:
+
+	subs xzr, x7, #1
+	b.ne noDibujarUno2
+
+	bl dibujarUno
+	b noDibujarDos2
+
+	noDibujarUno2:
+
+	subs xzr, x7, #2
+	b.ne noDibujarDos2
+
+	bl dibujarDos
+
+	noDibujarDos2:
+
+	subs xzr, x7, #3
+	b.eq app
+
+	b restart
+
+
+
+
+
+
 //-----------FIN CODIGO----------------------------------------------------//
 
 
-/*
+/* ----------EJEMPLOS DE PRINT Y GPIO---------------------
 
 	mov x2,512         // Y Size
 	mov x7,x0
@@ -256,16 +339,6 @@ horizontal:
 		add x8, x8, #1
 		add x4, x4, 0x200
 		b loopr
-
-
-
-
-
-
-
-
-
-
 
 	// X0 contiene la direccion base del framebuffer
 
@@ -315,7 +388,3 @@ loop0:
 */
 
 //-----------FIN CODIGO----------------------------------------------------//
-
-
-
-

@@ -9,77 +9,41 @@ Linker script and memory map
 
 LOAD main.o
 
-<<<<<<< HEAD
-.text           0x0000000000000000    0x1075c
+.text           0x0000000000000000    0x10940
  *(.text*)
- .text          0x0000000000000000    0x1075c main.o
+ .text          0x0000000000000000    0x10940 main.o
                 0x00000000000100a0                app
-                0x00000000000100e4                print
-                0x0000000000010114                DibujarRectangulo
-                0x0000000000010184                inputRead
-                0x00000000000101c4                iniciarFondo
-                0x0000000000010260                PruebaRectangulo
-                0x0000000000010344                iniciarBarras
-                0x0000000000010350                borrarBarras
-                0x0000000000010358                mostrarBarras
-                0x0000000000010410                SiguientePosicionBarra
-                0x0000000000010498                DibujarPelota
-                0x000000000001050c                BorrarPelota
-                0x0000000000010580                MoverPelota
-                0x00000000000105f0                CheckPelota
-                0x0000000000010744                InicioPelota
+                0x0000000000010104                restart
+                0x0000000000010134                print
+                0x0000000000010164                DibujarRectangulo
+                0x00000000000101d4                comprobarPuntaje
+                0x0000000000010250                inputRead
+                0x0000000000010290                lineaVertical
+                0x0000000000010298                iniciarFondo
+                0x0000000000010334                borrarNumeros
+                0x0000000000010524                iniciarBarras
+                0x0000000000010530                borrarBarras
+                0x0000000000010538                mostrarBarras
+                0x00000000000105f0                SiguientePosicionBarra
+                0x0000000000010674                DibujarPelota
+                0x00000000000106e8                BorrarPelota
+                0x000000000001075c                MoverPelota
+                0x00000000000107cc                CheckPelota
+                0x0000000000010928                InicioPelota
 
-.iplt           0x000000000001075c        0x0
- .iplt          0x000000000001075c        0x0 main.o
+.iplt           0x0000000000010940        0x0
+ .iplt          0x0000000000010940        0x0 main.o
 
-.rela.dyn       0x0000000000010760        0x0
- .rela.iplt     0x0000000000010760        0x0 main.o
+.rela.dyn       0x0000000000010940        0x0
+ .rela.iplt     0x0000000000010940        0x0 main.o
 
-.data           0x000000000001075c        0x0
- .data          0x000000000001075c        0x0 main.o
+.data           0x0000000000010940        0x0
+ .data          0x0000000000010940        0x0 main.o
 
-.igot.plt       0x0000000000010760        0x0
- .igot.plt      0x0000000000010760        0x0 main.o
+.igot.plt       0x0000000000010940        0x0
+ .igot.plt      0x0000000000010940        0x0 main.o
 
-.bss            0x000000000001075c        0x0
+.bss            0x0000000000010940        0x0
  *(.bss*)
- .bss           0x000000000001075c        0x0 main.o
-=======
-.text           0x0000000000000000    0x106ec
- *(.text*)
- .text          0x0000000000000000    0x106ec main.o
-                0x00000000000100a0                app
-                0x00000000000100e8                restart
-                0x000000000001010c                print
-                0x000000000001013c                inputRead
-                0x000000000001017c                lineaVertical
-                0x0000000000010184                iniciarFondo
-                0x0000000000010220                iniciarBarras
-                0x000000000001022c                borrarBarras
-                0x0000000000010234                mostrarBarras
-                0x00000000000102ec                SiguientePosicionBarra
-                0x0000000000010374                DibujarPelota
-                0x00000000000103e8                BorrarPelota
-                0x000000000001045c                CambiarDireccionPelota
-                0x0000000000010500                MoverPelota
-                0x0000000000010570                CheckPelota
-                0x00000000000106cc                InicioPelota
-                0x00000000000106ec                PuntoPelota
-
-.iplt           0x00000000000106ec        0x0
- .iplt          0x00000000000106ec        0x0 main.o
-
-.rela.dyn       0x00000000000106f0        0x0
- .rela.iplt     0x00000000000106f0        0x0 main.o
-
-.data           0x00000000000106ec        0x0
- .data          0x00000000000106ec        0x0 main.o
-
-.igot.plt       0x00000000000106f0        0x0
- .igot.plt      0x00000000000106f0        0x0 main.o
-
-.bss            0x00000000000106ec        0x0
- *(.bss*)
- .bss           0x00000000000106ec        0x0 main.o
->>>>>>> gaston
+ .bss           0x0000000000010940        0x0 main.o
 OUTPUT(main.elf elf64-littleaarch64)

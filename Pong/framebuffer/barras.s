@@ -28,7 +28,7 @@
 iniciarBarras:
 
     mov x27, 0x100
-    mov x26, 0x100
+    mov x26, 0x100              //Les doy a las barras la posicion inicial del medio
 
     b mostrarBarras
 
@@ -51,7 +51,7 @@ dibujarBarra:
 
     lsr x15, x1, #48
     and x15, x15, 0xFFFF
-    mov x4, x15          //seteo el color de x4
+    mov x4, x15             //seteo el color de x4
 	lsl x4, x4, #9
     orr x4, x4, x7          //Seteo el eje Y con la posicion menos la mitad de la altura
     lsl x4, x4, #9          //El eje X queda en 0
@@ -112,35 +112,34 @@ listaBarra:
 
     br x29
 
-//-----------------------------------------------------------------------------//
 
 SiguientePosicionBarra:
 
-    mov x29, x30
+    mov x29, x30                    //Guardo la posicion de retorno
 
-    mov x5, xzr
+    //mov x5, xzr                     //Dejo a x5 como cero
 
     mov x6, x27
-    and x6, x6, 0x1FF
+    and x6, x6, 0x1FF               //Guardo en x6 la posicion de la primer barra
     mov x8, BARRA_ALTO
-    lsr x8, x8, #1
+    lsr x8, x8, #1                  //Guardo en x8 la mitad de la altura de la barra
 
-	and x7, x1, BTN_1		//Obtengo solo el bit del BTN_1
-	cbz x7, restarPrimeraBarra			//Si el bit no es cero (boton pulsado) salto
+	and x7, x1, BTN_1		        //Obtengo solo el bit del BTN_1
+	cbz x7, restarPrimeraBarra		//Si el bit no es cero (boton pulsado) salto
 
-    add x7, x6, x8
+    add x7, x6, x8                  //Guardo en x7 el punto maximo de l abarra
     subs xzr, x7, FIN_TABLERO_ABAJO
-    b.eq restarPrimeraBarra
+    b.eq restarPrimeraBarra         //Si esta en su ultima posicion no le puedo sumar
 
 
-    add x27, x27, #1
+    add x27, x27, #1                //Si se apreto el boton y la barra no esta en un limite, sumo 1
     //mov x5, 0x3
 
 
     restarPrimeraBarra:
 
-    and x7, x1, BTN_2   	//Obtengo solo el bit del BTN_1
-	cbz x7, sumarSegundaBarra			//Si el bit no es cero (boton pulsado) salto
+    and x7, x1, BTN_2
+	cbz x7, sumarSegundaBarra
 
     sub x7, x6, x8
     subs xzr, x7, FIN_TABLERO_ARRIBA
@@ -152,15 +151,15 @@ SiguientePosicionBarra:
 
     sumarSegundaBarra:
 
-    //-----------------//
+    //-------lo mismo que con la primera barra----------//
 
     and x6, x26, 0x1FF
     mov x8, BARRA_ALTO
     lsr x8, x8, #1
 
 
-	and x7, x1, BTN_3		//Obtengo solo el bit del BTN_1
-	cbz x7, restarSegundaBarra			//Si el bit no es cero (boton pulsado) salto
+	and x7, x1, BTN_3
+	cbz x7, restarSegundaBarra
 
     add x7, x6, x8
     subs xzr, x7, FIN_TABLERO_ABAJO
@@ -171,8 +170,8 @@ SiguientePosicionBarra:
 
     restarSegundaBarra:
 
-    and x7, x1, BTN_4   	//Obtengo solo el bit del BTN_1
-	cbz x7, SiguientePosicionBarraTerminado			//Si el bit no es cero (boton pulsado) salto
+    and x7, x1, BTN_4
+	cbz x7, SiguientePosicionBarraTerminado
 
     sub x7, x6, x8
     subs xzr, x7, FIN_TABLERO_ARRIBA
@@ -183,7 +182,12 @@ SiguientePosicionBarra:
 
     SiguientePosicionBarraTerminado:
 
-    /*
+
+    done:
+
+    br x29
+
+    /*      Este codigo era el comienzo de eliminar la latencia
 
     //x5 = [... btn_4, btn_3, (eor btn_4, btn_3), btn_2, btn_1, (eor btn_1 btn_2)]
     and x12, x5, 0x1
@@ -221,10 +225,10 @@ SiguientePosicionBarra:
 
     doneMuestra:
         bl mostrarBarras
-        */
     done:
 
     br x29
+    */
 
 
 

@@ -184,17 +184,15 @@ MoverPelota:
 
 
 
-
-
 CheckPelota:
     and x5, x3, 0x1FF
     lsr x4, x3, 9
     sub x4,x4, 7
     and x4, x4, 0x1FF
-    cmp x4, 0x80
+    cmp x4, 0x7E
     b.le tocalado
     add x4, x4, 15
-    cmp x4, 384
+    cmp x4, 400
     b.ge tocalado
 sigo:
     mov x6, PELOTA_MITAD + BARRA_ANCHO
@@ -214,7 +212,7 @@ tocaderecha:
     mov x13, BARRA_ALTO + PELOTA
     lsr x13, x13, 1
     add x12, x13, x26
-    sub x12, x12, 2 
+    sub x12, x12, 2
     cmp x4, x12
     b.ge punto
     sub x12, x26, x13
@@ -294,10 +292,15 @@ nodiagoarribai:
     br x30
 
 punto:
-  b app
+
+    add x24, x24, #1
+
+    b comprobarPuntaje
 
 punto2:
-  b app
+
+    add x24, x24, #4
+    b comprobarPuntaje
 
 InicioPelota:
     mov x3, 0x201
