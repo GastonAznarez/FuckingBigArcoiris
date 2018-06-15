@@ -177,50 +177,46 @@ InfLoop:		// Infinite Loop
 
 
 
-DibujarRectangulo:
-	and x11, x9, 0x1FF
+DibujarRectangulo:										//DIBUJA UN RECTANGULO QUE VA DEL PUNTO GUARDADO EN X9 AL DE X10
+	and x11, x9, 0x1FF									//tomo las coordenadas de los puntos de x9 y x10
 	lsr x12, x9, 9
 	and x13, x10, 0x1FF
 	lsr x14, x10, 9
 
+    mov x29, x30            		//Guardo la direccion de retorno porque se sobreescribe x30 en print
+    mov x4, x19          				//seteo el color de x4
+		lsl x4, x4, #9
+    orr x4, x4, x12          		//Seteo el inicio en y	(el y del punto 1)
+    lsl x4, x4, #9
+    orr x4, x4, x11							//Seteo el inicio en x (el x del punto 1)
+		sub x15, x13, x11
+		sub x16, x14, x12
+		mov x17, 0									//contador horizontal
+  puntoRectangulo:
+	  mov x8, #0              		//Contador vertical
 
-    mov x29, x30            //Guardo la direccion de retorno porque se sobreescribe x30 en print
-    mov x4, x19          //seteo el color de x4
-	lsl x4, x4, #9
-    orr x4, x4, x12          //Seteo el eje Y con la posicion menos la mitad de la altura
-    lsl x4, x4, #9          //El eje X queda en 0
-    orr x4, x4, x11
-	sub x15, x13, x11
-	sub x16, x14, x12
-	mov x17, 0
-  puntoRectangulo:             //Punto de partida de dibujar eje Y
-	  mov x8, #0              //Contador vertical
-  rectanguloVertical:
-        subs xzr, x8, x16
-        b.eq columnaaTerminado          //Si el contador llego al limite, termina o aumenta el X
+	rectanguloVertical:
+      subs xzr, x8, x16					//Veo si termine la columna
+      b.eq columnaaTerminado    //Si el contador llego al limite, termina o aumenta el X
     	bl print
     	add x8, x8, #1              //Sumo uno al contador
     	add x4, x4, BARRA_UNIDAD_Y  //Sumo 1 al eje Y
 
-    	b rectanguloVertical             //Recurcion
+    	b rectanguloVertical             //Recursion
 
 columnaaTerminado:
 
-    add x17, x17, #1                  //Se termino de pintar una columna
-
+    add x17, x17, #1               //Se termino de pintar una columna
     subs xzr, x15, x17
-    b.eq rectListo                    //Branch de configuracion si se termino la primer barra, sinio aumentamos x
-
-	lsl x18, x16, 9
-    sub x4, x4, x18             //Le resto los 50 lugares que me adelante en el Y de
-
-    add x4, x4, #1                  //Le sumo 1 al eje X
+    b.eq rectListo                 //Branch de configuracion si se termino la primer barra, sinio aumentamos x
+		lsl x18, x16, 9
+    sub x4, x4, x18             	 //Le resto los 50 lugares que me adelante en el Y de
+    add x4, x4, #1                 //Le sumo 1 al eje X
 
     b puntoRectangulo
 
 rectListo:
     br x29
-
 
 comprobarPuntaje:
 
