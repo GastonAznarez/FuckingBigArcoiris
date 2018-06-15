@@ -212,7 +212,7 @@ tocaderecha:
     mov x13, BARRA_ALTO + PELOTA
     lsr x13, x13, 1
     add x12, x13, x26
-    sub x12, x12, 2
+    add x12, x12, 2
     cmp x4, x12
     b.ge punto
     sub x12, x26, x13
@@ -256,7 +256,7 @@ tocaizquierda:
     mov x13, BARRA_ALTO + PELOTA
     lsr x13, x13, 1
     add x12, x13, x27
-    sub x12, x12, 2
+    add x12, x12, 2
     cmp x4, x12
     b.ge punto2
     sub x12, x27, x13

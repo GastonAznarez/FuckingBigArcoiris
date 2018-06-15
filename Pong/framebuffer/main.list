@@ -17074,7 +17074,7 @@ Disassembly of section .text:
    10818:	d28008ed 	mov	x13, #0x47                  	// #71
    1081c:	d341fdad 	lsr	x13, x13, #1
    10820:	8b1a01ac 	add	x12, x13, x26
-   10824:	d100098c 	sub	x12, x12, #0x2
+   10824:	9100098c 	add	x12, x12, #0x2
    10828:	eb0c009f 	cmp	x4, x12
    1082c:	5400076a 	b.ge	10918 <punto>
    10830:	cb0d034c 	sub	x12, x26, x13
@@ -17116,7 +17116,7 @@ Disassembly of section .text:
    10898:	d28008ed 	mov	x13, #0x47                  	// #71
    1089c:	d341fdad 	lsr	x13, x13, #1
    108a0:	8b1b01ac 	add	x12, x13, x27
-   108a4:	d100098c 	sub	x12, x12, #0x2
+   108a4:	9100098c 	add	x12, x12, #0x2
    108a8:	eb0c009f 	cmp	x4, x12
    108ac:	540003aa 	b.ge	10920 <punto2>
    108b0:	cb0d036c 	sub	x12, x27, x13
