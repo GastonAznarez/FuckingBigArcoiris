@@ -16453,8 +16453,6 @@ Disassembly of section .text:
    100ac:	52800003 	mov	w3, #0x0                   	// #0
    100b0:	52800004 	mov	w4, #0x0                   	// #0
    100b4:	52800005 	mov	w5, #0x0                   	// #0
-
-00000000000100b8 <loop0>:
    100b8:	9400000d 	bl	100ec <subirRojo>
    100bc:	9400003d 	bl	101b0 <subirVerde>
    100c0:	94000019 	bl	10124 <bajarRojo>
